@@ -1,0 +1,18 @@
+/node_modules
+/.idea
+
+# production
+/build
+/dist
+analysis.html
+
+# misc
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+
+yarn-debug.log*
+yarn-error.log*
+
+*storybook.log
