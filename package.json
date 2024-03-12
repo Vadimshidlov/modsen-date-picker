@@ -2,8 +2,14 @@
   "name": "@vadimshidlov/modsen-date-picker",
   "version": "0.0.1",
   "description": "A date-picker library",
-  "repository": "https://github.com/Vadimshidlov/modsen-date-picker.git",
-  "author": "Vadimshidlov <vadim.shidlov@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vadimshidlov/modsen-date-picker.git"
+  },
+  "author": {
+    "name": "Vadimshidlov",
+    "email": "vadim.shidlov@gmail.com"
+  },
   "license": "MIT",
   "main": "dist/cjs/index.js",
   "types": "dist/index.d.ts",
@@ -21,7 +27,8 @@
     "lint": "eslint . --color",
     "lint:fix": "eslint --fix .",
     "format": "prettier --write src/**/*.{ts,tsx,css,md,json} --config ./.prettierrc",
-    "prepare": "husky"
+    "prepare": "husky",
+    "chromatic": "npx chromatic --project-token=chpt_b49c6c888e265ed"
   },
   "husky": {
     "hooks": {
@@ -51,6 +58,7 @@
     "@types/react": "^18.2.64",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
+    "chromatic": "^11.0.8",
     "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
     "eslint-config-airbnb": "^19.0.4",
@@ -81,5 +89,9 @@
   "peerDependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/Vadimshidlov/modsen-date-picker/issues"
+  },
+  "homepage": "https://github.com/Vadimshidlov/modsen-date-picker#readme"
 }
