@@ -59,5 +59,6 @@ module.exports = {
         "@typescript-eslint/default-param-last": "off",
         "@typescript-eslint/naming-convention": "off",
         "no-restricted-exports": "off",
+        "react/require-default-props": "off",
     },
 };
