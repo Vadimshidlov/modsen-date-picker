@@ -1,10 +1,15 @@
-/* eslint-disable no-nested-ternary */
-import { ChangeEvent, useMemo, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useReducer, useState } from "react";
 import { DatePickerStyled } from "@/components/DatePicker/DatePicker.styled";
 import { DateInput } from "@/components/DateInput/index";
 import { Flex } from "@/components/Flex/index";
 import { GlobalStyles } from "@/components/GlobalStyle/index";
 import { Calendar } from "@/components/Calendar";
+import {
+    getCurrentMonthDays,
+    getDaysInAMonth,
+    getNextMonthDays,
+    getPreviousMonthDays,
+} from "@/utils/date";
 
 export type CalendarItemsType = {
     year: number;
@@ -12,98 +17,58 @@ export type CalendarItemsType = {
     date: number;
 };
 
-export const getDaysInAMonth = (year: number, month: number) => {
-    const nextMonthDate = new Date(year, month + 1, 1);
-    nextMonthDate.setMinutes(-1);
+/*
+ * return {1,2}
+ * return {
+ * datepicke
+ * to
+ * calendar
+ * }
+ * */
 
-    return nextMonthDate.getDate();
-};
-
-export const getPreviousMonthDays = (year: number, month: number, weekStartsOnSunday: boolean) => {
-    const currentMonthFirstDay = new Date(year, month, 1);
-
-    const dayOfTheWeek = currentMonthFirstDay.getDay();
-
-    let previousMonthCellsCount = (dayOfTheWeek === 0 ? 7 : dayOfTheWeek) - 1;
-
-    if (weekStartsOnSunday) {
-        previousMonthCellsCount += 1;
-    }
-
-    const previousMonthDaysCount = getDaysInAMonth(year, month - 1);
-
-    const previousMonthCalendarItems: CalendarItemsType[] = [];
-
-    const [itemYear, itemMonth] = month === 0 ? [year - 1, 11] : [year, month - 1];
-
-    for (let i = previousMonthCellsCount - 1; i >= 0; i -= 1) {
-        previousMonthCalendarItems.push({
-            year: itemYear,
-            month: itemMonth,
-            date: previousMonthDaysCount - i,
-        });
-    }
-
-    return previousMonthCalendarItems;
-};
-
-export const getNextMonthDays = (year: number, month: number, weekStartsOnSunday: boolean) => {
-    const currentMonthFirstDay = new Date(year, month, 1);
-    const dayOfTheWeek = currentMonthFirstDay.getDay();
-    const previousMonthCellsCount = (dayOfTheWeek === 0 ? 7 : dayOfTheWeek) - 1;
-
-    const nextMonthDaysFullCount = getDaysInAMonth(year, month);
-
-    const totalCalendarCells = previousMonthCellsCount + nextMonthDaysFullCount;
-
-    const rows = Math.ceil(totalCalendarCells / 7);
-    const requiredCells = rows * 7;
-
-    let nextYearDaysCalendarCount = requiredCells - totalCalendarCells;
-
-    if (weekStartsOnSunday) {
-        nextYearDaysCalendarCount -= 1;
-    }
-
-    const nextMonthCalendarItems: CalendarItemsType[] = [];
-
-    const [itemYear, itemMonth] = month === 11 ? [year + 1, 0] : [year, month + 1];
-
-    for (let i = 1; i <= nextYearDaysCalendarCount; i += 1) {
-        nextMonthCalendarItems.push({
-            year: itemYear,
-            month: itemMonth,
-            date: i,
-        });
-    }
-
-    return nextMonthCalendarItems;
-};
-
-export const getCurrentMonthDays = (year: number, month: number, daysCount: number) => {
-    const currentMonthCalendarItems: CalendarItemsType[] = [];
-
-    for (let i = 1; i <= daysCount; i += 1) {
-        currentMonthCalendarItems.push({
-            year,
-            month,
-            date: i,
-        });
-    }
-
-    return currentMonthCalendarItems;
-};
-
-// -----------------
-
+// export function DatePicker({minValue, maxValue, reversWeek, weekMode, withRange}) {
 export function DatePicker() {
-    // const [value, setValue] = useState("25/11/2022");
     const [value, setValue] = useState("");
+    // const [calendarValue, setCalendarValue] = useState(value);
     const [isShowCalendar, setIsShowCalendar] = useState(false);
     const [weekStartsOnSunday] = useState(false);
 
+    // const [state, dispatch] = useReducer(reducer, withRange, getInitialState(withRange));
+
+    // useEffect(() => {
+    //     setCalendarValue(value);
+    // }, [value]);
+
+    // useEffect(() => {
+    //     console.log(calendarValue, `calendarValue`);
+    // }, [calendarValue]);
+
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setValue(e.target.value);
+        // setValue(e.target.value);
+
+        let inputValue = e.target.value;
+        inputValue = inputValue.replace(/\D/g, "");
+
+        if (inputValue.length > 4) {
+            inputValue = `${inputValue.slice(0, 2)}/${inputValue.slice(2, 4)}/${inputValue.slice(4)}`;
+        } else if (inputValue.length > 2) {
+            inputValue = `${inputValue.slice(0, 2)}/${inputValue.slice(2)}`;
+        }
+
+        setValue(inputValue);
+
+        /* let inputValue = e.target.value;
+        // Удаляем все, кроме цифр
+        inputValue = inputValue.replace(/\D/g, "");
+
+        // Добавляем разделители в дату
+        if (inputValue.length > 4) {
+            inputValue = `${inputValue.slice(0, 2)}/${inputValue.slice(2, 4)}/${inputValue.slice(4)}`;
+        } else if (inputValue.length > 2) {
+            inputValue = `${inputValue.slice(0, 2)}/${inputValue.slice(2)}`;
+        }
+
+        setValue(inputValue); */
     };
 
     const handleClearInput = () => {
@@ -111,8 +76,59 @@ export function DatePicker() {
         setIsShowCalendar(false);
     };
 
+    const handleSetDate = (dateValue: string) => {
+        setValue(dateValue);
+    };
+
+    /* const handleClearInput = () => {
+        setValue("");
+        setIsShowCalendar(false);
+    };
+
+    const handlePrevYear = () => {
+        const [day, month, year] = calendarValue.split("/");
+
+        if (day && month && year) {
+            setCalendarValue(`${day}/${month}/${+year - 1}`);
+        }
+    };
+
+    const handleNextYear = () => {
+        const [day, month, year] = calendarValue.split("/");
+
+        if (day && month && year) {
+            setCalendarValue(`${day}/${month}/${+year + 1}`);
+        }
+    };
+
+    const handlePrevMonth = () => {
+        const [day, month, year] = calendarValue.split("/");
+
+        if (day && month && year) {
+            const nexCalendarDate =
+                +month === 1 ? `${day}/12/${+year - 1}` : `${day}/${+month - 1}/${+year}`;
+
+            setCalendarValue(nexCalendarDate);
+        }
+    };
+
+    const handleNextMonth = () => {
+        const [day, month, year] = calendarValue.split("/");
+
+        if (day && month && year) {
+            const nexCalendarDate =
+                +month === 12 ? `${day}/01/${+year + 1}` : `${day}/${+month + 1}/${+year}`;
+
+            setCalendarValue(nexCalendarDate);
+        }
+    };
+
+    const handleSetDate = (dateValue: string) => {
+        setValue(dateValue);
+    };
+
     const calendarItems = useMemo((): CalendarItemsType[] | null => {
-        const [day, month, year] = value.split("/");
+        const [day, month, year] = calendarValue.split("/");
 
         if (day && month && year) {
             const selectedMonthDaysCount = getDaysInAMonth(+year, +month - 1);
@@ -125,7 +141,7 @@ export function DatePicker() {
         }
 
         return null;
-    }, [value, weekStartsOnSunday]);
+    }, [calendarValue, weekStartsOnSunday]); */
 
     return (
         <DatePickerStyled>
@@ -138,16 +154,18 @@ export function DatePicker() {
                     setIsShowCalendar={setIsShowCalendar}
                 />
             </Flex>
-            {isShowCalendar && calendarItems && (
+            {/* {isShowCalendar && calendarItems && ( */}
+            {isShowCalendar && (
                 <Calendar
-                    calendarItems={calendarItems}
+                    // calendarItems={calendarItems}
                     weekStartsOnSunday={weekStartsOnSunday}
                     dateValue={value}
-                    handleSetDate={(dateValue: string) => {
-                        console.log(dateValue, `I am gonna to set new Date from calendar!`);
-
-                        setValue(dateValue);
-                    }}
+                    // calendarValue={calendarValue}
+                    handleSetDate={handleSetDate}
+                    // handlePrevYear={handlePrevYear}
+                    // handleNextYear={handleNextYear}
+                    // handlePrevMonth={handlePrevMonth}
+                    // handleNextMonth={handleNextMonth}
                 />
             )}
         </DatePickerStyled>

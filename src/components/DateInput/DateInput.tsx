@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, FocusEvent, useEffect, useRef, useState } from "react";
 import { Flex } from "@/components/Flex/index";
 import { ReactComponent as CalendarIcon } from "@/assets/svg/Calendar.svg";
 import { ReactComponent as ClearDateIcon } from "@/assets/svg/Clear.svg";
@@ -12,6 +12,7 @@ export const DateInputStyled = styled.input`
     font-weight: 400;
     font-size: 15px;
     line-height: normal;
+    width: 80%;
     outline: none;
 `;
 
@@ -37,8 +38,15 @@ export function DateInput({
     handleClearInput,
     setIsShowCalendar,
 }: DateInputProps) {
-    // const [value, setValue] = useState("");
     const [validateError, setValidateError] = useState("");
+
+    // const inputRef = useRef<HTMLInputElement>(null);
+    //
+    // useEffect(() => {
+    //     if (!inputRef.current) return;
+    //
+    //     inputRef.current.setSelectionRange(value.length, value.length);
+    // }, [value]);
 
     useEffect(() => {
         console.log(validateError);
@@ -59,16 +67,8 @@ export function DateInput({
         }
     }, [setIsShowCalendar, value]);
 
-    // const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    //     setValue(e.target.value);
-    // };
-    //
-    // const handleClearInput = () => {
-    //     setValue("");
-    // };
-
     return (
-        <Flex direction="column">
+        <Flex direction="column" maxWidth="250px">
             <Flex
                 align="center"
                 border="1px solid #dddddd"
@@ -80,10 +80,38 @@ export function DateInput({
             >
                 <CalendarIcon />
                 <DateInputStyled
+                    // ref={inputRef}
                     type="text"
                     placeholder="Choose Date"
                     value={value}
                     onChange={handleInputChange}
+                    // onFocus={(e: FocusEvent<HTMLInputElement>) => {
+                    //     const dateLength = e.currentTarget.value.length;
+                    //     //
+                    //     console.log(dateLength, `dateLength`);
+                    //     //
+                    //     // // e.target.setSelectionRange(dateLength, dateLength);
+                    //     //
+                    //     // // e.currentTarget.setSelectionRange(dateLength, dateLength);
+                    //     // e.target.selectionStart = dateLength;
+                    //     // e.target.selectionEnd = dateLength;
+                    //
+                    //     // setTimeout(() => {
+                    //     //     const dateLength = e.currentTarget.value.length;
+                    //     //     e.target.setSelectionRange(dateLength, dateLength);
+                    //     // }, 0);
+                    //
+                    //     console.log(e.target);
+                    //
+                    //     e.target.setSelectionRange(dateLength, dateLength);
+                    //     setTimeout(() => {
+                    //         e.target.focus();
+                    //         e.target.setSelectionRange(dateLength, dateLength);
+                    //
+                    //         console.log(e.target.selectionStart);
+                    //         console.log(e.target.selectionEnd);
+                    //     }, 0);
+                    // }}
                 />
                 <Flex minWidth="15px">
                     {validateError === "" && value !== "" ? (

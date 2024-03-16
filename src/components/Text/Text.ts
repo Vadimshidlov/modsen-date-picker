@@ -51,4 +51,5 @@ export const TextError = styled(Text)`
     font-weight: 400;
     color: red;
     font-size: 15px;
+    text-align: center;
 `;
