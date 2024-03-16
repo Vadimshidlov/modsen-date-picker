@@ -1,10 +1,11 @@
 import styled from "styled-components";
-import { ChangeEvent, FocusEvent, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, FocusEvent, useEffect, useRef, useState } from "react";
 import { Flex } from "@/components/Flex/index";
 import { ReactComponent as CalendarIcon } from "@/assets/svg/Calendar.svg";
 import { ReactComponent as ClearDateIcon } from "@/assets/svg/Clear.svg";
 import { validateDate } from "@/utils/date/index";
 import { TextError } from "@/components/Text/index";
+import { DatePickerActionType } from "@/components/DatePicker/DatePicker";
 
 export const DateInputStyled = styled.input`
     outline: none;
@@ -27,15 +28,17 @@ const StyledClearDateIcon = styled(ClearDateIcon)`
 
 export type DateInputProps = {
     value: string;
-    handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
-    handleClearInput: () => void;
+    // handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    // handleClearInput: () => void;
     setIsShowCalendar: (value: React.SetStateAction<boolean>) => void;
+    dispatch: React.Dispatch<DatePickerActionType>;
 };
 
 export function DateInput({
     value,
-    handleInputChange,
-    handleClearInput,
+    dispatch,
+    // handleInputChange,
+    // handleClearInput,
     setIsShowCalendar,
 }: DateInputProps) {
     const [validateError, setValidateError] = useState("");
@@ -47,6 +50,42 @@ export function DateInput({
     //
     //     inputRef.current.setSelectionRange(value.length, value.length);
     // }, [value]);
+
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+        // setValue(e.target.value);
+
+        let inputValue = e.target.value;
+        inputValue = inputValue.replace(/\D/g, "");
+
+        if (inputValue.length > 4) {
+            inputValue = `${inputValue.slice(0, 2)}/${inputValue.slice(2, 4)}/${inputValue.slice(4)}`;
+        } else if (inputValue.length > 2) {
+            inputValue = `${inputValue.slice(0, 2)}/${inputValue.slice(2)}`;
+        }
+
+        // dispatch({
+        //     type: "SET_FIRST_CALENDAR_DATE",
+        //     payload: {
+        //         dateValue: inputValue,
+        //     },
+        // });
+
+        dispatch({
+            type: "SET_CALENDAR_AND_PICKER_DATE",
+            payload: {
+                dateValue: inputValue,
+            },
+        });
+    };
+
+    const handleClearInputDate = () => {
+        dispatch({
+            type: "SET_FIRST_CALENDAR_DATE",
+            payload: {
+                dateValue: "",
+            },
+        });
+    };
 
     useEffect(() => {
         console.log(validateError);
@@ -85,37 +124,10 @@ export function DateInput({
                     placeholder="Choose Date"
                     value={value}
                     onChange={handleInputChange}
-                    // onFocus={(e: FocusEvent<HTMLInputElement>) => {
-                    //     const dateLength = e.currentTarget.value.length;
-                    //     //
-                    //     console.log(dateLength, `dateLength`);
-                    //     //
-                    //     // // e.target.setSelectionRange(dateLength, dateLength);
-                    //     //
-                    //     // // e.currentTarget.setSelectionRange(dateLength, dateLength);
-                    //     // e.target.selectionStart = dateLength;
-                    //     // e.target.selectionEnd = dateLength;
-                    //
-                    //     // setTimeout(() => {
-                    //     //     const dateLength = e.currentTarget.value.length;
-                    //     //     e.target.setSelectionRange(dateLength, dateLength);
-                    //     // }, 0);
-                    //
-                    //     console.log(e.target);
-                    //
-                    //     e.target.setSelectionRange(dateLength, dateLength);
-                    //     setTimeout(() => {
-                    //         e.target.focus();
-                    //         e.target.setSelectionRange(dateLength, dateLength);
-                    //
-                    //         console.log(e.target.selectionStart);
-                    //         console.log(e.target.selectionEnd);
-                    //     }, 0);
-                    // }}
                 />
                 <Flex minWidth="15px">
                     {validateError === "" && value !== "" ? (
-                        <StyledClearDateIcon onClick={handleClearInput} />
+                        <StyledClearDateIcon onClick={handleClearInputDate} />
                     ) : null}
                 </Flex>
             </Flex>

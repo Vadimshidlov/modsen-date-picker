@@ -1,62 +1,37 @@
 /* eslint-disable react/no-array-index-key */
-import { CalendarPropsType } from "@/types";
-import { CalendarYearMode } from "@/components/Calendar/CalendarYearMode";
-import { CalendarWeekMode } from "@/components/Calendar/CalendarWeekMode";
+import React, { MouseEvent, useMemo } from "react";
+import { DEFAULT_DAYS, REVERSE_DAYS } from "@/constants";
+import {
+    getCurrentMonthDays,
+    getDateValues,
+    getDaysInAMonth,
+    getMontName,
+    getNextMonthDays,
+    getPreviousMonthDays,
+} from "@/utils/date";
+import { CalendarItemsType, DatePickerActionType } from "@/components/DatePicker/DatePicker";
+import { Flex } from "@/components/Flex";
+import { Button } from "@/components/Button";
+import { Text } from "@/components/Text";
+import { CurrentDayWeekButton, DayButton, DayWeekButton } from "@/components/DayButton";
+import { ReactComponent as PrevYearButton } from "@/assets/svg/prev-button.svg";
+import { ReactComponent as NextYearButton } from "@/assets/svg/next-button.svg";
+import { ReactComponent as PrevMonthButton } from "@/assets/svg/prev-month-button.svg";
+import { ReactComponent as NextMonthButton } from "@/assets/svg/next-month-button.svg";
 
-export function Calendar({
+export type CalendarYearModePropsType = {
+    weekStartsOnSunday: boolean;
+    dateValue: string;
+    dateCalendarValue: string;
+    dispatch: React.Dispatch<DatePickerActionType>;
+};
+
+export function CalendarYearMode({
     weekStartsOnSunday,
     dateValue,
     dateCalendarValue,
     dispatch,
-    weekMode,
-}: CalendarPropsType) {
-    return weekMode ? (
-        <CalendarWeekMode
-            weekStartsOnSunday={weekStartsOnSunday}
-            dateValue={dateValue}
-            dateCalendarValue={dateCalendarValue}
-            dispatch={dispatch}
-        />
-    ) : (
-        <CalendarYearMode
-            weekStartsOnSunday={weekStartsOnSunday}
-            dateValue={dateValue}
-            dateCalendarValue={dateCalendarValue}
-            dispatch={dispatch}
-        />
-    );
-}
-
-// // /* eslint-disable react/no-array-index-key */
-// import { MouseEvent, useMemo, useState } from "react";
-// import { Flex } from "@/components/Flex";
-// import { CurrentDayWeekButton, DayButton, DayWeekButton } from "@/components/DayButton/index";
-// import { ReactComponent as PrevYearButton } from "@/assets/svg/prev-button.svg";
-// import { ReactComponent as NextYearButton } from "@/assets/svg/next-button.svg";
-// import { ReactComponent as PrevMonthButton } from "@/assets/svg/prev-month-button.svg";
-// import { ReactComponent as NextMonthButton } from "@/assets/svg/next-month-button.svg";
-// import { Button } from "@/components/Button/index";
-// import { Text } from "@/components/Text/index";
-// import { CalendarPropsType } from "@/types";
-// import { DEFAULT_DAYS, REVERSE_DAYS } from "@/constants";
-// import {
-//     getCurrentMonthDays,
-//     getDateValues,
-//     getDaysInAMonth,
-//     getMontName,
-//     getNextMonthDays,
-//     getPreviousMonthDays,
-// } from "@/utils/date";
-// import { CalendarItemsType } from "@/components/DatePicker/DatePicker";
-// import { CalendarYearMode } from "@/components/Calendar/CalendarYearMode";
-
-/*
-export function Calendar({
-    weekStartsOnSunday,
-    dateValue,
-    dateCalendarValue,
-    dispatch,
-}: CalendarPropsType) {
+}: CalendarYearModePropsType) {
     const DAYS = weekStartsOnSunday ? REVERSE_DAYS : DEFAULT_DAYS;
     const [dayNumber, monthNumber, yearNumber] = getDateValues(dateValue);
     const [innerDayNumber, innerMonthNumber, innerYearNumber] = getDateValues(dateCalendarValue);
@@ -239,4 +214,4 @@ export function Calendar({
             </Flex>
         </Flex>
     );
-} */
+}

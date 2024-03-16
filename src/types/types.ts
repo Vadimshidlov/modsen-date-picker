@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
-import { CalendarItemsType } from "@/components/DatePicker/DatePicker";
+import React, { ReactNode } from "react";
+import { CalendarItemsType, DatePickerActionType } from "@/components/DatePicker/DatePicker";
 
 export type ButtonPropsType = {
     direction?: "row" | "column";
@@ -28,8 +28,11 @@ export type CalendarPropsType = {
     // calendarItems: CalendarItemsType[];
     weekStartsOnSunday: boolean;
     dateValue: string;
+    dateCalendarValue: string;
     // calendarValue: string;
-    handleSetDate: (dateValue: string) => void;
+    // handleSetDate: (dateValue: string) => void;
+    dispatch: React.Dispatch<DatePickerActionType>;
+    weekMode: boolean;
     // handlePrevYear: () => void;
     // handleNextYear: () => void;
     // handlePrevMonth: () => void;

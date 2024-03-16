@@ -119,3 +119,22 @@ export const getDateValues = (dateValue: string): number[] => {
 
     return [+dateList[0], +dateList[1] - 1, +dateList[2]];
 };
+
+export const getPriviousMonthWeeksCount = (
+    previousMonthDate: string,
+    weekStartsOnSunday: boolean,
+): number | null => {
+    const [day, month, year] = previousMonthDate.split("/");
+
+    if (day && month && year) {
+        const selectedMonthDaysCount = getDaysInAMonth(+year, +month - 1);
+
+        return [
+            ...getPreviousMonthDays(+year, +month - 1, weekStartsOnSunday),
+            ...getCurrentMonthDays(+year, +month - 1, selectedMonthDaysCount),
+            ...getNextMonthDays(+year, +month - 1, weekStartsOnSunday),
+        ].length;
+    }
+
+    return null;
+};
