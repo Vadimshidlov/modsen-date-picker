@@ -1,33 +1,11 @@
-import { ReactNode } from "react";
 import styled from "styled-components";
+import { ButtonPropsType } from "@/types";
 
-interface ButtonProps {
-    direction?: "row" | "column";
-    align?: "flex-start" | "flex-end" | "center" | "stretch";
-    justify?:
-        | "flex-start"
-        | "flex-end"
-        | "center"
-        | "space-between"
-        | "space-around"
-        | "space-evenly";
-    margin?: string;
-    border?: string;
-    borderRadius?: string;
-    padding?: string;
-    width?: string;
-    maxWidth?: string;
-    minWidth?: string;
-    height?: string;
-    rowGap?: string;
-    columnGap?: string;
-    children: ReactNode;
-}
-
-export const Button = styled.button<ButtonProps>`
+export const Button = styled.button<ButtonPropsType>`
     background: transparent;
     cursor: pointer;
     transition: all 0.5s;
+    display: flex;
 
     &:hover {
         opacity: 0.5;

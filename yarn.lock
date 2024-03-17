@@ -8234,6 +8234,13 @@ rollup-plugin-peer-deps-external@^2.2.4:
   resolved "https://registry.yarnpkg.com/rollup-plugin-peer-deps-external/-/rollup-plugin-peer-deps-external-2.2.4.tgz#8a420bbfd6dccc30aeb68c9bf57011f2f109570d"
   integrity sha512-AWdukIM1+k5JDdAqV/Cxd+nejvno2FVLVeZ74NKggm3Q5s9cbbcOgUPGdbxPi4BXu7xGaZ8HG12F+thImYu/0g==
 
+rollup-plugin-tsconfig-paths@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-tsconfig-paths/-/rollup-plugin-tsconfig-paths-1.5.2.tgz#753bf970b14594b9ea1e93f3237eda380635f5b5"
+  integrity sha512-tyS7u2Md0eXKwbDfTuDDa1izciwqhOZsHzX7zYc5gKC1L7q5ozdSt+q1jjtD1dDqWyjrt8lZoiLtOQGhMHh1OQ==
+  dependencies:
+    typescript-paths "^1.5.1"
+
 rollup-plugin-visualizer@^5.12.0:
   version "5.12.0"
   resolved "https://registry.yarnpkg.com/rollup-plugin-visualizer/-/rollup-plugin-visualizer-5.12.0.tgz#661542191ce78ee4f378995297260d0c1efb1302"
@@ -9053,6 +9060,11 @@ typed-array-length@^1.0.5:
     has-proto "^1.0.3"
     is-typed-array "^1.1.13"
     possible-typed-array-names "^1.0.0"
+
+typescript-paths@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/typescript-paths/-/typescript-paths-1.5.1.tgz#975cf5883915b24f9287315a8fa70b3b3451e32e"
+  integrity sha512-lYErSLCON2MSplVV5V/LBgD4UNjMgY3guATdFCZY2q1Nr6OZEu4q6zX/rYMsG1TaWqqQSszg6C9EU7AGWMDrIw==
 
 typescript@^5.4.2:
   version "5.4.2"

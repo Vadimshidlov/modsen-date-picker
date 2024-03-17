@@ -1,10 +1,11 @@
 import styled from "styled-components";
-import { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, FocusEvent, useEffect, useRef, useState } from "react";
 import { Flex } from "@/components/Flex/index";
 import { ReactComponent as CalendarIcon } from "@/assets/svg/Calendar.svg";
 import { ReactComponent as ClearDateIcon } from "@/assets/svg/Clear.svg";
 import { validateDate } from "@/utils/date/index";
 import { TextError } from "@/components/Text/index";
+import { DatePickerActionType } from "@/components/DatePicker/DatePicker";
 
 export const DateInputStyled = styled.input`
     outline: none;
@@ -12,6 +13,7 @@ export const DateInputStyled = styled.input`
     font-weight: 400;
     font-size: 15px;
     line-height: normal;
+    width: 80%;
     outline: none;
 `;
 
@@ -26,19 +28,41 @@ const StyledClearDateIcon = styled(ClearDateIcon)`
 
 export type DateInputProps = {
     value: string;
-    handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
-    handleClearInput: () => void;
     setIsShowCalendar: (value: React.SetStateAction<boolean>) => void;
+    dispatch: React.Dispatch<DatePickerActionType>;
 };
 
-export function DateInput({
-    value,
-    handleInputChange,
-    handleClearInput,
-    setIsShowCalendar,
-}: DateInputProps) {
-    // const [value, setValue] = useState("");
+export function DateInput({ value, dispatch, setIsShowCalendar }: DateInputProps) {
     const [validateError, setValidateError] = useState("");
+
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+        let inputValue = e.target.value;
+        inputValue = inputValue.replace(/\D/g, "");
+
+        if (inputValue.length > 4) {
+            inputValue = `${inputValue.slice(0, 2)}/${inputValue.slice(2, 4)}/${inputValue.slice(4)}`;
+        } else if (inputValue.length > 2) {
+            inputValue = `${inputValue.slice(0, 2)}/${inputValue.slice(2)}`;
+        }
+
+        dispatch({
+            type: "SET_CALENDAR_AND_PICKER_DATE",
+            payload: {
+                dateValue: inputValue,
+            },
+        });
+    };
+
+    const handleClearInputDate = () => {
+        dispatch({
+            type: "SET_CALENDAR_AND_PICKER_DATE",
+            payload: {
+                dateValue: "",
+            },
+        });
+
+        setIsShowCalendar(false);
+    };
 
     useEffect(() => {
         console.log(validateError);
@@ -59,16 +83,8 @@ export function DateInput({
         }
     }, [setIsShowCalendar, value]);
 
-    // const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    //     setValue(e.target.value);
-    // };
-    //
-    // const handleClearInput = () => {
-    //     setValue("");
-    // };
-
     return (
-        <Flex direction="column">
+        <Flex direction="column" maxWidth="250px">
             <Flex
                 align="center"
                 border="1px solid #dddddd"
@@ -87,7 +103,7 @@ export function DateInput({
                 />
                 <Flex minWidth="15px">
                     {validateError === "" && value !== "" ? (
-                        <StyledClearDateIcon onClick={handleClearInput} />
+                        <StyledClearDateIcon onClick={handleClearInputDate} />
                     ) : null}
                 </Flex>
             </Flex>
