@@ -168,13 +168,6 @@ export function CalendarWeekMode({
                                         }}
                                         onContextMenu={(e: MouseEvent) => {
                                             e.preventDefault();
-
-                                            console.log(
-                                                calendarItem.date,
-                                                calendarItem.month,
-                                                calendarItem.year,
-                                                "Hello from context menu click!",
-                                            );
                                         }}
                                     >
                                         {calendarItem.date}

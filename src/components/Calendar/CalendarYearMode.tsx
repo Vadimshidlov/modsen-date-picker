@@ -36,8 +36,6 @@ export function CalendarYearMode({
     const [dayNumber, monthNumber, yearNumber] = getDateValues(dateValue);
     const [innerDayNumber, innerMonthNumber, innerYearNumber] = getDateValues(dateCalendarValue);
 
-    console.log(dateCalendarValue, `calendarValue`);
-
     const handlePrevYear = () => {
         const [day, month, year] = dateCalendarValue.split("/");
 

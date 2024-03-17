@@ -45,36 +45,18 @@ export type DatePickerActionType = {
 const reducer = (state = initialPickerState, action: DatePickerActionType) => {
     switch (action.type) {
         case "SET_FIRST_CALENDAR_DATE":
-            console.log({ ...state, datePickerFirstValue: action.payload.dateValue });
-
             return { ...state, datePickerFirstValue: action.payload.dateValue };
         case "SET_SECOND_CALENDAR_DATE":
-            console.log({
-                ...state,
-                datePickerSecondValue: action.payload.dateValue,
-            });
-
             return {
                 ...state,
                 datePickerSecondValue: action.payload.dateValue,
             };
         case "SET_CALENDAR_DATE":
-            console.log({
-                ...state,
-                calendarValue: action.payload.dateValue,
-            });
-
             return {
                 ...state,
                 calendarValue: action.payload.dateValue,
             };
         case "SET_CALENDAR_AND_PICKER_DATE":
-            console.log({
-                ...state,
-                datePickerFirstValue: action.payload.dateValue,
-                calendarValue: action.payload.dateValue,
-            });
-
             return {
                 ...state,
                 datePickerFirstValue: action.payload.dateValue,

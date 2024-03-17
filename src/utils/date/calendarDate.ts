@@ -99,8 +99,6 @@ export const getMontName = (dateValue: string): null | string => {
 export const getMontNumber = (dateValue: string): null | number => {
     const dateList = dateValue.split("/");
 
-    console.log(dateValue, `dateValue getMontNumber helper`);
-
     if (typeof dateList[1] === "undefined") return null;
 
     const monthNumber = +dateList[1] - 1;
@@ -110,8 +108,6 @@ export const getMontNumber = (dateValue: string): null | number => {
 
 export const getDateValues = (dateValue: string): number[] => {
     const dateList = dateValue.split("/");
-
-    console.log(dateValue, `dateValue getMontNumber helper`);
 
     if (
         typeof dateList[0] === "undefined" ||
@@ -157,21 +153,15 @@ export const getInitialWeekNumber = (monthDate: string, weekStartsOnSunday: bool
             ...getNextMonthDays(+year, +month - 1, weekStartsOnSunday),
         ];
 
-        console.log(cellsLIst);
-
         cellsLIst.forEach((cellItem, index) => {
             if (
                 cellItem.month === Number(month) - 1 &&
                 cellItem.year === Number(year) &&
                 cellItem.date === Number(day)
             ) {
-                console.log(index, `<--- index / I have found initial week number`);
-
                 weekNumber = Math.floor(index / 7);
             }
         });
-
-        console.log(weekNumber, `weekNumber from getInitialWeekNumber`);
 
         return weekNumber;
     }
