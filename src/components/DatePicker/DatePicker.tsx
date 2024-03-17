@@ -67,10 +67,15 @@ const reducer = (state = initialPickerState, action: DatePickerActionType) => {
     }
 };
 
+export type DatePickerPropsType = {
+    weekStartsOnSunday: boolean;
+    weekMode: boolean;
+};
+
 // export function DatePicker({minValue, maxValue, reversWeek, weekMode, withRange}) {
-export function DatePicker() {
+export function DatePicker({ weekStartsOnSunday, weekMode }: DatePickerPropsType) {
     const [isShowCalendar, setIsShowCalendar] = useState(false);
-    const [weekStartsOnSunday] = useState(false);
+    // const [weekStartsOnSunday] = useState(false);
     const [pickerState, dispatch] = useReducer(reducer, initialPickerState);
 
     return (
@@ -87,14 +92,12 @@ export function DatePicker() {
             </Flex>
             {isShowCalendar && (
                 <Calendar
-                    // weekStartsOnSunday={weekStartsOnSunday}
-                    weekStartsOnSunday
+                    weekStartsOnSunday={weekStartsOnSunday}
                     dateValue={pickerState.datePickerFirstValue}
                     dateCalendarValue={pickerState.calendarValue}
                     // handleSetDate={handleSetDate}
                     dispatch={dispatch}
-                    // weekMode={false}
-                    weekMode
+                    weekMode={weekMode}
                 />
             )}
         </DatePickerStyled>
