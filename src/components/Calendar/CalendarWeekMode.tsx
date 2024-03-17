@@ -16,8 +16,7 @@ import { Text } from "@/components/Text";
 import { CurrentDayWeekButton, DayButton, DayWeekButton } from "@/components/DayButton";
 import { ReactComponent as PrevYearButton } from "@/assets/svg/prev-button.svg";
 import { ReactComponent as NextYearButton } from "@/assets/svg/next-button.svg";
-import { ReactComponent as PrevMonthButton } from "@/assets/svg/prev-month-button.svg";
-import { ReactComponent as NextMonthButton } from "@/assets/svg/next-month-button.svg";
+import { getInitialWeekNumber, getPreviousMonthWeeksCount } from "@/utils/date/calendarDate";
 
 export type CalendarYearModePropsType = {
     weekStartsOnSunday: boolean;
@@ -35,11 +34,11 @@ export function CalendarWeekMode({
     const DAYS = weekStartsOnSunday ? REVERSE_DAYS : DEFAULT_DAYS;
     const [dayNumber, monthNumber, yearNumber] = getDateValues(dateValue);
     const [innerDayNumber, innerMonthNumber, innerYearNumber] = getDateValues(dateCalendarValue);
-    const [weekNumber, setWeekNumber] = useState(0);
+    // const [weekNumber, setWeekNumber] = useState(0);
+    const [weekNumber, setWeekNumber] = useState(() =>
+        getInitialWeekNumber(dateCalendarValue, weekStartsOnSunday),
+    );
 
-    console.log(weekNumber, `weekNumber`);
-
-    // console.log(dateCalendarValue, `calendarValue`);
     const calendarItems = useMemo((): CalendarItemsType[] | null => {
         const [day, month, year] = dateCalendarValue.split("/");
 
@@ -69,10 +68,19 @@ export function CalendarWeekMode({
             const nexCalendarDate =
                 +month === 1 ? `${day}/12/${+year - 1}` : `${day}/${+month - 1}/${+year}`;
 
+            const previousMonthWeeksCount = getPreviousMonthWeeksCount(
+                nexCalendarDate,
+                weekStartsOnSunday,
+            );
+
             dispatch({
                 type: "SET_CALENDAR_DATE",
                 payload: { dateValue: nexCalendarDate },
             });
+
+            if (previousMonthWeeksCount !== null) {
+                setWeekNumber(previousMonthWeeksCount);
+            }
         }
     };
 
@@ -98,37 +106,10 @@ export function CalendarWeekMode({
                 type: "SET_CALENDAR_DATE",
                 payload: { dateValue: nexCalendarDate },
             });
+
             setWeekNumber(0);
         }
     };
-
-    /* const handlePrevMonth = () => {
-        const [day, month, year] = dateCalendarValue.split("/");
-
-        if (day && month && year) {
-            const nexCalendarDate =
-                +month === 1 ? `${day}/12/${+year - 1}` : `${day}/${+month - 1}/${+year}`;
-
-            dispatch({
-                type: "SET_CALENDAR_DATE",
-                payload: { dateValue: nexCalendarDate },
-            });
-        }
-    };
-
-    const handleNextMonth = () => {
-        const [day, month, year] = dateCalendarValue.split("/");
-
-        if (day && month && year) {
-            const nexCalendarDate =
-                +month === 12 ? `${day}/01/${+year + 1}` : `${day}/${+month + 1}/${+year}`;
-
-            dispatch({
-                type: "SET_CALENDAR_DATE",
-                payload: { dateValue: nexCalendarDate },
-            });
-        }
-    }; */
 
     return (
         <Flex
@@ -138,7 +119,7 @@ export function CalendarWeekMode({
             border="1px solid #dddddd"
             borderRadius="8px"
         >
-            <Flex columnGap="44px" justify="space-between">
+            <Flex justify="space-between">
                 <Flex columnGap="8px" align="center">
                     <Button onClick={handlePrevWeek}>
                         {null}
@@ -167,6 +148,8 @@ export function CalendarWeekMode({
                     calendarItems
                         .slice(weekNumber * 7, 7 + 7 * weekNumber)
                         .map((calendarItem, index) => {
+                            console.log(calendarItems, `calendarItems map`);
+
                             if (
                                 calendarItem.month === monthNumber &&
                                 calendarItem.year === yearNumber &&
@@ -211,6 +194,13 @@ export function CalendarWeekMode({
                                                 dateValue: `${calendarItem.date}/${calendarItem.month + 1}/${calendarItem.year}`,
                                             },
                                         });
+
+                                        setWeekNumber(
+                                            getInitialWeekNumber(
+                                                `${calendarItem.date}/${calendarItem.month + 1}/${calendarItem.year}`,
+                                                weekStartsOnSunday,
+                                            ),
+                                        );
                                     }}
                                 >
                                     {calendarItem.date}
@@ -225,6 +215,13 @@ export function CalendarWeekMode({
                                                 dateValue: `${calendarItem.date}/${calendarItem.month + 1}/${calendarItem.year}`,
                                             },
                                         });
+
+                                        setWeekNumber(
+                                            getInitialWeekNumber(
+                                                `${calendarItem.date}/${calendarItem.month + 1}/${calendarItem.year}`,
+                                                weekStartsOnSunday,
+                                            ),
+                                        );
                                     }}
                                 >
                                     {calendarItem.date}

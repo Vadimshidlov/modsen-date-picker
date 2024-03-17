@@ -112,7 +112,7 @@ export function CalendarYearMode({
             border="1px solid #dddddd"
             borderRadius="8px"
         >
-            <Flex columnGap="44px" justify="space-between">
+            <Flex justify="space-between">
                 <Flex columnGap="8px" align="center">
                     <Button onClick={handlePrevYear}>
                         {null}

@@ -28,32 +28,14 @@ const StyledClearDateIcon = styled(ClearDateIcon)`
 
 export type DateInputProps = {
     value: string;
-    // handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
-    // handleClearInput: () => void;
     setIsShowCalendar: (value: React.SetStateAction<boolean>) => void;
     dispatch: React.Dispatch<DatePickerActionType>;
 };
 
-export function DateInput({
-    value,
-    dispatch,
-    // handleInputChange,
-    // handleClearInput,
-    setIsShowCalendar,
-}: DateInputProps) {
+export function DateInput({ value, dispatch, setIsShowCalendar }: DateInputProps) {
     const [validateError, setValidateError] = useState("");
 
-    // const inputRef = useRef<HTMLInputElement>(null);
-    //
-    // useEffect(() => {
-    //     if (!inputRef.current) return;
-    //
-    //     inputRef.current.setSelectionRange(value.length, value.length);
-    // }, [value]);
-
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        // setValue(e.target.value);
-
         let inputValue = e.target.value;
         inputValue = inputValue.replace(/\D/g, "");
 
@@ -62,13 +44,6 @@ export function DateInput({
         } else if (inputValue.length > 2) {
             inputValue = `${inputValue.slice(0, 2)}/${inputValue.slice(2)}`;
         }
-
-        // dispatch({
-        //     type: "SET_FIRST_CALENDAR_DATE",
-        //     payload: {
-        //         dateValue: inputValue,
-        //     },
-        // });
 
         dispatch({
             type: "SET_CALENDAR_AND_PICKER_DATE",
@@ -80,11 +55,13 @@ export function DateInput({
 
     const handleClearInputDate = () => {
         dispatch({
-            type: "SET_FIRST_CALENDAR_DATE",
+            type: "SET_CALENDAR_AND_PICKER_DATE",
             payload: {
                 dateValue: "",
             },
         });
+
+        setIsShowCalendar(false);
     };
 
     useEffect(() => {
@@ -119,7 +96,6 @@ export function DateInput({
             >
                 <CalendarIcon />
                 <DateInputStyled
-                    // ref={inputRef}
                     type="text"
                     placeholder="Choose Date"
                     value={value}

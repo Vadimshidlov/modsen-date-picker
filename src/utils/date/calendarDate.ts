@@ -10,19 +10,17 @@ export const getDaysInAMonth = (year: number, month: number) => {
 
 export const getPreviousMonthDays = (year: number, month: number, weekStartsOnSunday: boolean) => {
     const currentMonthFirstDay = new Date(year, month, 1);
-
     const dayOfTheWeek = currentMonthFirstDay.getDay();
 
-    let previousMonthCellsCount = (dayOfTheWeek === 0 ? 7 : dayOfTheWeek) - 1;
+    let previousMonthCellsCount =
+        (!weekStartsOnSunday && dayOfTheWeek === 0 ? 7 : dayOfTheWeek) - 1;
 
     if (weekStartsOnSunday) {
         previousMonthCellsCount += 1;
     }
 
     const previousMonthDaysCount = getDaysInAMonth(year, month - 1);
-
     const previousMonthCalendarItems: CalendarItemsType[] = [];
-
     const [itemYear, itemMonth] = month === 0 ? [year - 1, 11] : [year, month - 1];
 
     for (let i = previousMonthCellsCount - 1; i >= 0; i -= 1) {
@@ -40,11 +38,8 @@ export const getNextMonthDays = (year: number, month: number, weekStartsOnSunday
     const currentMonthFirstDay = new Date(year, month, 1);
     const dayOfTheWeek = currentMonthFirstDay.getDay();
     const previousMonthCellsCount = (dayOfTheWeek === 0 ? 7 : dayOfTheWeek) - 1;
-
     const nextMonthDaysFullCount = getDaysInAMonth(year, month);
-
     const totalCalendarCells = previousMonthCellsCount + nextMonthDaysFullCount;
-
     const rows = Math.ceil(totalCalendarCells / 7);
     const requiredCells = rows * 7;
 
@@ -52,6 +47,14 @@ export const getNextMonthDays = (year: number, month: number, weekStartsOnSunday
 
     if (weekStartsOnSunday) {
         nextYearDaysCalendarCount -= 1;
+    }
+
+    if (weekStartsOnSunday && dayOfTheWeek === 6 && nextMonthDaysFullCount === 30) {
+        nextYearDaysCalendarCount = 6;
+    }
+
+    if (weekStartsOnSunday && dayOfTheWeek === 5 && nextMonthDaysFullCount === 31) {
+        nextYearDaysCalendarCount = 6;
     }
 
     const nextMonthCalendarItems: CalendarItemsType[] = [];
@@ -120,7 +123,7 @@ export const getDateValues = (dateValue: string): number[] => {
     return [+dateList[0], +dateList[1] - 1, +dateList[2]];
 };
 
-export const getPriviousMonthWeeksCount = (
+export const getPreviousMonthWeeksCount = (
     previousMonthDate: string,
     weekStartsOnSunday: boolean,
 ): number | null => {
@@ -129,12 +132,49 @@ export const getPriviousMonthWeeksCount = (
     if (day && month && year) {
         const selectedMonthDaysCount = getDaysInAMonth(+year, +month - 1);
 
-        return [
+        const cellsLIst = [
             ...getPreviousMonthDays(+year, +month - 1, weekStartsOnSunday),
             ...getCurrentMonthDays(+year, +month - 1, selectedMonthDaysCount),
             ...getNextMonthDays(+year, +month - 1, weekStartsOnSunday),
-        ].length;
+        ];
+
+        return cellsLIst.length / 7 - 1;
     }
 
     return null;
+};
+
+export const getInitialWeekNumber = (monthDate: string, weekStartsOnSunday: boolean): number => {
+    const [day, month, year] = monthDate.split("/");
+    let weekNumber = 0;
+
+    if (day && month && year) {
+        const selectedMonthDaysCount = getDaysInAMonth(+year, +month - 1);
+
+        const cellsLIst = [
+            ...getPreviousMonthDays(+year, +month - 1, weekStartsOnSunday),
+            ...getCurrentMonthDays(+year, +month - 1, selectedMonthDaysCount),
+            ...getNextMonthDays(+year, +month - 1, weekStartsOnSunday),
+        ];
+
+        console.log(cellsLIst);
+
+        cellsLIst.forEach((cellItem, index) => {
+            if (
+                cellItem.month === Number(month) - 1 &&
+                cellItem.year === Number(year) &&
+                cellItem.date === Number(day)
+            ) {
+                console.log(index, `<--- index / I have found initial week number`);
+
+                weekNumber = Math.floor(index / 7);
+            }
+        });
+
+        console.log(weekNumber, `weekNumber from getInitialWeekNumber`);
+
+        return weekNumber;
+    }
+
+    return weekNumber;
 };
