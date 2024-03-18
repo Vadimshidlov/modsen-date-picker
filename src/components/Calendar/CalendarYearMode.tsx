@@ -18,28 +18,38 @@ import { ReactComponent as PrevYearButton } from "@/assets/svg/prev-button.svg";
 import { ReactComponent as NextYearButton } from "@/assets/svg/next-button.svg";
 import { ReactComponent as PrevMonthButton } from "@/assets/svg/prev-month-button.svg";
 import { ReactComponent as NextMonthButton } from "@/assets/svg/next-month-button.svg";
-import { validateMaxDate, validateMinDate } from "@/utils/date/calendarDate";
+import {
+    isDateInRange,
+    isNumbersExist,
+    validateMaxDate,
+    validateMinDate,
+} from "@/utils/date/calendarDate";
+import { EndRangeButton, RangeButton, StartRangeButton } from "@/components/DayButton/DayButton";
 
 export type CalendarYearModePropsType = {
     weekStartsOnSunday: boolean;
     dateValue: string;
+    dateSecondValue: string;
     dateCalendarValue: string;
     dispatch: React.Dispatch<DatePickerActionType>;
     minDate: Date;
     maxDate: Date;
+    withRange: boolean;
 };
 
 export function CalendarYearMode({
     weekStartsOnSunday,
     dateValue,
-    // dateSecondValue,
+    dateSecondValue,
     dateCalendarValue,
     dispatch,
     minDate,
     maxDate,
+    withRange,
 }: CalendarYearModePropsType) {
     const DAYS = weekStartsOnSunday ? REVERSE_DAYS : DEFAULT_DAYS;
     const [dayNumber, monthNumber, yearNumber] = getDateValues(dateValue);
+    const [secondDayNumber, secondMonthNumber, secondYearNumber] = getDateValues(dateSecondValue);
     const [innerDayNumber, innerMonthNumber, innerYearNumber] = getDateValues(dateCalendarValue);
 
     const handlePrevYear = () => {
@@ -153,10 +163,6 @@ export function CalendarYearMode({
             <Flex flexWrap="wrap" align="center" justify="center">
                 {calendarItems &&
                     calendarItems.map((calendarItem, index) => {
-                        // if (withRange){
-                        //
-                        // }
-
                         if (
                             validateMinDate(minDate, calendarItem) ||
                             validateMaxDate(maxDate, calendarItem)
@@ -166,6 +172,117 @@ export function CalendarYearMode({
                                     {calendarItem.date}
                                 </DayButton>
                             );
+                        }
+
+                        if (withRange) {
+                            if (
+                                Number.isInteger(dayNumber) &&
+                                Number.isInteger(monthNumber) &&
+                                Number.isInteger(yearNumber)
+                            ) {
+                                if (
+                                    calendarItem.date === dayNumber &&
+                                    calendarItem.month === monthNumber &&
+                                    calendarItem.year === yearNumber
+                                ) {
+                                    console.log("I have found start range");
+
+                                    return (
+                                        <StartRangeButton
+                                            key={index.toString()}
+                                            onClick={() => {
+                                                dispatch({
+                                                    type: "SET_CALENDAR_AND_PICKER_DATE",
+                                                    payload: {
+                                                        dateValue: `${calendarItem.date}/${calendarItem.month + 1}/${calendarItem.year}`,
+                                                    },
+                                                });
+                                            }}
+                                            onContextMenu={(e: MouseEvent) => {
+                                                e.preventDefault();
+                                            }}
+                                        >
+                                            {calendarItem.date}
+                                        </StartRangeButton>
+                                    );
+                                }
+                            }
+                        }
+
+                        if (withRange) {
+                            if (
+                                Number.isInteger(secondDayNumber) &&
+                                Number.isInteger(secondMonthNumber) &&
+                                Number.isInteger(secondYearNumber)
+                            ) {
+                                if (
+                                    calendarItem.date === secondDayNumber &&
+                                    calendarItem.month === secondMonthNumber &&
+                                    calendarItem.year === secondYearNumber
+                                ) {
+                                    console.log("I have found end range");
+
+                                    return (
+                                        <EndRangeButton
+                                            key={index.toString()}
+                                            onClick={() => {
+                                                dispatch({
+                                                    type: "SET_CALENDAR_AND_PICKER_DATE",
+                                                    payload: {
+                                                        dateValue: `${calendarItem.date}/${calendarItem.month + 1}/${calendarItem.year}`,
+                                                    },
+                                                });
+                                            }}
+                                            onContextMenu={(e: MouseEvent) => {
+                                                e.preventDefault();
+                                            }}
+                                        >
+                                            {calendarItem.date}
+                                        </EndRangeButton>
+                                    );
+                                }
+                            }
+                        }
+
+                        if (withRange) {
+                            if (
+                                isNumbersExist(
+                                    dayNumber,
+                                    monthNumber,
+                                    yearNumber,
+                                    secondDayNumber,
+                                    secondMonthNumber,
+                                    secondYearNumber,
+                                ) &&
+                                isDateInRange(
+                                    calendarItem,
+                                    yearNumber,
+                                    monthNumber,
+                                    dayNumber,
+                                    secondYearNumber,
+                                    secondMonthNumber,
+                                    secondDayNumber,
+                                )
+                            ) {
+                                return (
+                                    <RangeButton
+                                        key={index.toString()}
+                                        onClick={() => {
+                                            dispatch({
+                                                type: "SET_CALENDAR_AND_PICKER_DATE",
+                                                payload: {
+                                                    dateValue: `${calendarItem.date}/${calendarItem.month + 1}/${calendarItem.year}`,
+                                                },
+                                            });
+                                        }}
+                                        onContextMenu={(e: MouseEvent) => {
+                                            e.preventDefault();
+                                        }}
+                                    >
+                                        {calendarItem.date}
+                                    </RangeButton>
+                                );
+                            }
                         }
 
                         if (
@@ -213,15 +330,6 @@ export function CalendarYearMode({
                             <DayButton
                                 key={index.toString()}
                                 onClick={() => {
-                                    // if (withRange){
-                                    //
-                                    //
-                                    // }
-                                    //
-                                    //
-                                    //
-                                    //
-
                                     dispatch({
                                         type: "SET_CALENDAR_AND_PICKER_DATE",
                                         payload: {

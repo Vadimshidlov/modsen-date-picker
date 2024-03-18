@@ -6,12 +6,13 @@ import { CalendarWeekMode } from "@/components/Calendar/CalendarWeekMode";
 export function Calendar({
     weekStartsOnSunday,
     dateValue,
+    dateSecondValue,
     dateCalendarValue,
     dispatch,
     weekMode,
     minDate,
     maxDate,
-    // withRange
+    withRange,
 }: CalendarPropsType) {
     return weekMode ? (
         <CalendarWeekMode
@@ -21,15 +22,18 @@ export function Calendar({
             dispatch={dispatch}
             minDate={minDate}
             maxDate={maxDate}
+            withRange={withRange}
         />
     ) : (
         <CalendarYearMode
             weekStartsOnSunday={weekStartsOnSunday}
             dateValue={dateValue}
+            dateSecondValue={dateSecondValue}
             dateCalendarValue={dateCalendarValue}
             dispatch={dispatch}
             minDate={minDate}
             maxDate={maxDate}
+            withRange={withRange}
         />
     );
 }

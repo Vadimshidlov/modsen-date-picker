@@ -4,6 +4,7 @@ import { DateInput } from "@/components/DateInput/index";
 import { Flex } from "@/components/Flex/index";
 import { GlobalStyles } from "@/components/GlobalStyle/index";
 import { Calendar } from "@/components/Calendar";
+import { Text } from "@/components/Text/index";
 
 export type CalendarItemsType = {
     year: number;
@@ -34,6 +35,7 @@ export type DatePickerActionType = {
         | "SET_FIRST_CALENDAR_DATE"
         | "SET_SECOND_CALENDAR_DATE"
         | "SET_CALENDAR_AND_PICKER_DATE"
+        | "CLEAR_SECOND_CALENDAR_DATE"
         | "SET_CALENDAR_DATE";
     payload: {
         dateValue: string;
@@ -43,18 +45,48 @@ export type DatePickerActionType = {
 const reducer = (state = initialPickerState, action: DatePickerActionType) => {
     switch (action.type) {
         case "SET_FIRST_CALENDAR_DATE":
+            // console.log("SET_FIRST_CALENDAR_DATE", {
+            //     ...state,
+            //     datePickerFirstValue: action.payload.dateValue,
+            // });
+
             return { ...state, datePickerFirstValue: action.payload.dateValue };
         case "SET_SECOND_CALENDAR_DATE":
+            // console.log("SET_SECOND_CALENDAR_DATE", {
+            //     ...state,
+            //     datePickerSecondValue: action.payload.dateValue,
+            // });
+
             return {
                 ...state,
                 datePickerSecondValue: action.payload.dateValue,
             };
+        case "CLEAR_SECOND_CALENDAR_DATE":
+            // console.log("CLEAR_SECOND_CALENDAR_DATE", {
+            //     ...state,
+            //     datePickerSecondValue: "",
+            // });
+
+            return {
+                ...state,
+                datePickerSecondValue: "",
+            };
         case "SET_CALENDAR_DATE":
+            // console.log("SET_CALENDAR_DATE", {
+            //     ...state,
+            //     calendarValue: action.payload.dateValue,
+            // });
+
             return {
                 ...state,
                 calendarValue: action.payload.dateValue,
             };
         case "SET_CALENDAR_AND_PICKER_DATE":
+            // console.log("SET_CALENDAR_AND_PICKER_DATE", {
+            //     ...state,
+            //     calendarValue: action.payload.dateValue,
+            // });
+
             return {
                 ...state,
                 datePickerFirstValue: action.payload.dateValue,
@@ -67,6 +99,7 @@ const reducer = (state = initialPickerState, action: DatePickerActionType) => {
 
 export type DatePickerPropsType = {
     weekStartsOnSunday: boolean;
+    withRange: boolean;
     weekMode: boolean;
     minDate: Date;
     maxDate: Date;
@@ -74,6 +107,7 @@ export type DatePickerPropsType = {
 
 export function DatePicker({
     weekStartsOnSunday,
+    withRange,
     weekMode,
     minDate,
     maxDate,
@@ -81,21 +115,11 @@ export function DatePicker({
     const [isShowCalendar, setIsShowCalendar] = useState(false);
     const [pickerState, dispatch] = useReducer(reducer, initialPickerState);
 
-    // handler (key) {
-    //  return fn (){
-    //
-    //  }
-    // }
-
     return (
         <DatePickerStyled>
             <GlobalStyles />
-            <Flex margin="20px 0px 0px 0px">
-                {/*
-                From:
-                */}
-                {}
-
+            <Flex margin="20px 0px 0px 0px" direction="column">
+                {withRange && <Text>From:</Text>}
                 <DateInput
                     dispatch={dispatch}
                     // dispatch={dispatch}
@@ -103,27 +127,37 @@ export function DatePicker({
                     setIsShowCalendar={setIsShowCalendar}
                     minDate={minDate}
                     maxDate={maxDate}
+                    isWithRange={withRange}
+                    isFirstDate
                 />
 
-                {/*
-                To:
-                <DateInput
-                    dispatch={dispatch}
-                    // dispatch={dispatch}
-                    value={pickerState.datePickerFirstValue}
-                    setIsShowCalendar={setIsShowCalendar}
-                />
-                */}
+                {withRange && (
+                    <>
+                        <Text>To:</Text>
+                        <DateInput
+                            dispatch={dispatch}
+                            // dispatch={dispatch}
+                            value={pickerState.datePickerSecondValue}
+                            setIsShowCalendar={setIsShowCalendar}
+                            minDate={minDate}
+                            maxDate={maxDate}
+                            isWithRange={withRange}
+                            isFirstDate={false}
+                        />
+                    </>
+                )}
             </Flex>
             {isShowCalendar && (
                 <Calendar
                     weekStartsOnSunday={weekStartsOnSunday}
                     dateValue={pickerState.datePickerFirstValue}
+                    dateSecondValue={pickerState.datePickerSecondValue}
                     dateCalendarValue={pickerState.calendarValue}
                     dispatch={dispatch}
                     weekMode={weekMode}
                     minDate={minDate}
                     maxDate={maxDate}
+                    withRange={withRange}
                 />
             )}
         </DatePickerStyled>

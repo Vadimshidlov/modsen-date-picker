@@ -28,6 +28,7 @@ export type CalendarPropsType = {
     // calendarItems: CalendarItemsType[];
     weekStartsOnSunday: boolean;
     dateValue: string;
+    dateSecondValue: string;
     dateCalendarValue: string;
     // calendarValue: string;
     // handleSetDate: (dateValue: string) => void;
@@ -35,6 +36,7 @@ export type CalendarPropsType = {
     weekMode: boolean;
     minDate: Date;
     maxDate: Date;
+    withRange: boolean;
     // handlePrevYear: () => void;
     // handleNextYear: () => void;
     // handlePrevMonth: () => void;

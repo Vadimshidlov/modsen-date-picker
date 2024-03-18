@@ -34,6 +34,8 @@ export type DateInputProps = {
     dispatch: React.Dispatch<DatePickerActionType>;
     minDate: Date;
     maxDate: Date;
+    isWithRange: boolean;
+    isFirstDate: boolean;
 };
 
 export function DateInput({
@@ -42,6 +44,8 @@ export function DateInput({
     setIsShowCalendar,
     minDate,
     maxDate,
+    isFirstDate,
+    isWithRange,
 }: DateInputProps) {
     const [validateError, setValidateError] = useState("");
 
@@ -55,8 +59,19 @@ export function DateInput({
             inputValue = `${inputValue.slice(0, 2)}/${inputValue.slice(2)}`;
         }
 
+        if ((isWithRange && isFirstDate) || !isWithRange) {
+            dispatch({
+                type: "SET_CALENDAR_AND_PICKER_DATE",
+                payload: {
+                    dateValue: inputValue,
+                },
+            });
+
+            return;
+        }
+
         dispatch({
-            type: "SET_CALENDAR_AND_PICKER_DATE",
+            type: "SET_SECOND_CALENDAR_DATE",
             payload: {
                 dateValue: inputValue,
             },
@@ -64,14 +79,23 @@ export function DateInput({
     };
 
     const handleClearInputDate = () => {
+        if ((isWithRange && isFirstDate) || !isWithRange) {
+            dispatch({
+                type: "SET_CALENDAR_AND_PICKER_DATE",
+                payload: {
+                    dateValue: "",
+                },
+            });
+
+            setIsShowCalendar(false);
+        }
+
         dispatch({
-            type: "SET_CALENDAR_AND_PICKER_DATE",
+            type: "CLEAR_SECOND_CALENDAR_DATE",
             payload: {
                 dateValue: "",
             },
         });
-
-        setIsShowCalendar(false);
     };
 
     useEffect(() => {
@@ -85,13 +109,17 @@ export function DateInput({
         }
 
         if (!validateDate(value)) {
+            if (!isFirstDate) return;
+
             setValidateError("Date should be in DD/MM/YYYY format.");
             setIsShowCalendar(false);
         } else {
+            if (!isFirstDate) return;
+
             setValidateError("");
             setIsShowCalendar(true);
         }
-    }, [setIsShowCalendar, value]);
+    }, [isFirstDate, setIsShowCalendar, value]);
 
     return (
         <Flex direction="column" maxWidth="250px">

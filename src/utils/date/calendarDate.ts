@@ -190,3 +190,32 @@ export const validateInputMinMaxDate = (minDate: Date, maxDate: Date, inputDate:
 
     return true;
 };
+
+export const isNumbersExist = (
+    dayNumber: number | undefined,
+    monthNumber: number | undefined,
+    yearNumber: number | undefined,
+    secondDayNumber: number | undefined,
+    secondMonthNumber: number | undefined,
+    secondYearNumber: number | undefined,
+) =>
+    Number.isInteger(dayNumber) &&
+    Number.isInteger(monthNumber) &&
+    Number.isInteger(yearNumber) &&
+    Number.isInteger(secondDayNumber) &&
+    Number.isInteger(secondMonthNumber) &&
+    Number.isInteger(secondYearNumber);
+
+export const isDateInRange = (
+    calendarItem: CalendarItemsType,
+    yearNumber: number | undefined,
+    monthNumber: number | undefined,
+    dayNumber: number | undefined,
+    secondYearNumber: number | undefined,
+    secondMonthNumber: number | undefined,
+    secondDayNumber: number | undefined,
+) =>
+    new Date(calendarItem.year, calendarItem.month, calendarItem.date) >
+        new Date(yearNumber!, monthNumber!, dayNumber!) &&
+    new Date(calendarItem.year, calendarItem.month, calendarItem.date) <
+        new Date(secondYearNumber!, secondMonthNumber!, secondDayNumber!);

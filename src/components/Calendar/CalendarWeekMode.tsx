@@ -30,6 +30,7 @@ export type CalendarWeekModePropsType = {
     dispatch: React.Dispatch<DatePickerActionType>;
     minDate: Date;
     maxDate: Date;
+    withRange: boolean;
 };
 
 export function CalendarWeekMode({
@@ -39,6 +40,7 @@ export function CalendarWeekMode({
     dispatch,
     minDate,
     maxDate,
+    withRange,
 }: CalendarWeekModePropsType) {
     const DAYS = weekStartsOnSunday ? REVERSE_DAYS : DEFAULT_DAYS;
     const [dayNumber, monthNumber, yearNumber] = getDateValues(dateValue);

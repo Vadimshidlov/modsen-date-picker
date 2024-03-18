@@ -71,6 +71,37 @@ export const CurrentDayWeekButton = styled(DayButton)`
     border-radius: 8px;
 `;
 
+export const StartRangeButton = styled(DayButton)`
+    font-weight: 600;
+    padding: 7px 9px;
+    color: #ffffff;
+    background-color: #2f80ed;
+    line-height: 19px;
+    font-size: 14px;
+    border-radius: 8px 0px 0px 8px;
+`;
+
+export const EndRangeButton = styled(DayButton)`
+    font-weight: 600;
+    padding: 7px 9px;
+    color: #ffffff;
+    background-color: #2f80ed;
+    line-height: 19px;
+    font-size: 14px;
+    border-radius: 0px 8px 8px 0px;
+`;
+
+export const RangeButton = styled(DayButton)`
+    font-weight: 600;
+    padding: 7px 9px;
+    color: #2f80ed;
+    background-color: #2f80ed1a;
+
+    line-height: 19px;
+    font-size: 14px;
+    border-radius: 0px 0px 0px 0px;
+`;
+
 // export function DayButton(props: DayButtonProps) {
 //     const { children } = props;
 //
