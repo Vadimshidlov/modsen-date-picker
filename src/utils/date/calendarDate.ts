@@ -168,3 +168,25 @@ export const getInitialWeekNumber = (monthDate: string, weekStartsOnSunday: bool
 
     return weekNumber;
 };
+
+export const validateMinDate = (minDate: Date, calendarItem: CalendarItemsType) =>
+    minDate > new Date(calendarItem.year, calendarItem.month, calendarItem.date);
+
+export const validateMaxDate = (maxDate: Date, calendarItem: CalendarItemsType) =>
+    maxDate < new Date(calendarItem.year, calendarItem.month, calendarItem.date);
+
+export const validateInputMinMaxDate = (minDate: Date, maxDate: Date, inputDate: string) => {
+    const [day, month, year] = inputDate.split("/");
+
+    if (inputDate.length < 10) return true;
+
+    if (day && month && year) {
+        const result =
+            maxDate >= new Date(Number(year), Number(month) - 1, Number(day)) &&
+            minDate <= new Date(Number(year), Number(month) - 1, Number(day));
+
+        return result;
+    }
+
+    return true;
+};

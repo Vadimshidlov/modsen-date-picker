@@ -18,19 +18,25 @@ import { ReactComponent as PrevYearButton } from "@/assets/svg/prev-button.svg";
 import { ReactComponent as NextYearButton } from "@/assets/svg/next-button.svg";
 import { ReactComponent as PrevMonthButton } from "@/assets/svg/prev-month-button.svg";
 import { ReactComponent as NextMonthButton } from "@/assets/svg/next-month-button.svg";
+import { validateMaxDate, validateMinDate } from "@/utils/date/calendarDate";
 
 export type CalendarYearModePropsType = {
     weekStartsOnSunday: boolean;
     dateValue: string;
     dateCalendarValue: string;
     dispatch: React.Dispatch<DatePickerActionType>;
+    minDate: Date;
+    maxDate: Date;
 };
 
 export function CalendarYearMode({
     weekStartsOnSunday,
     dateValue,
+    // dateSecondValue,
     dateCalendarValue,
     dispatch,
+    minDate,
+    maxDate,
 }: CalendarYearModePropsType) {
     const DAYS = weekStartsOnSunday ? REVERSE_DAYS : DEFAULT_DAYS;
     const [dayNumber, monthNumber, yearNumber] = getDateValues(dateValue);
@@ -85,6 +91,8 @@ export function CalendarYearMode({
             });
         }
     };
+
+    const handleAddTodo = () => {};
 
     const calendarItems = useMemo((): CalendarItemsType[] | null => {
         const [day, month, year] = dateCalendarValue.split("/");
@@ -145,6 +153,21 @@ export function CalendarYearMode({
             <Flex flexWrap="wrap" align="center" justify="center">
                 {calendarItems &&
                     calendarItems.map((calendarItem, index) => {
+                        // if (withRange){
+                        //
+                        // }
+
+                        if (
+                            validateMinDate(minDate, calendarItem) ||
+                            validateMaxDate(maxDate, calendarItem)
+                        ) {
+                            return (
+                                <DayButton color="#AAAAAA" key={index.toString()} disabled>
+                                    {calendarItem.date}
+                                </DayButton>
+                            );
+                        }
+
                         if (
                             calendarItem.month === monthNumber &&
                             calendarItem.year === yearNumber &&
@@ -163,13 +186,6 @@ export function CalendarYearMode({
                                     }}
                                     onContextMenu={(e: MouseEvent) => {
                                         e.preventDefault();
-
-                                        console.log(
-                                            calendarItem.date,
-                                            calendarItem.month,
-                                            calendarItem.year,
-                                            "Hello from context menu click!",
-                                        );
                                     }}
                                 >
                                     {calendarItem.date}
@@ -197,6 +213,15 @@ export function CalendarYearMode({
                             <DayButton
                                 key={index.toString()}
                                 onClick={() => {
+                                    // if (withRange){
+                                    //
+                                    //
+                                    // }
+                                    //
+                                    //
+                                    //
+                                    //
+
                                     dispatch({
                                         type: "SET_CALENDAR_AND_PICKER_DATE",
                                         payload: {
@@ -213,3 +238,18 @@ export function CalendarYearMode({
         </Flex>
     );
 }
+
+/**
+ list = [
+ {
+     date: "12/11/2023",
+     todos: [
+     {title: "", complete: ""}
+ ]
+ }
+
+ ]
+
+
+
+ */

@@ -21,6 +21,8 @@ export const Primary: StoryObj = (args: DatePickerPropsType) => <DatePicker {...
 Primary.args = {
     weekStartsOnSunday: false,
     weekMode: false,
+    minDate: new Date(2023, 0, 1),
+    maxDate: new Date(2024, 0, 31),
 };
 
 export const PrimaryWeekMode: StoryObj = (args: DatePickerPropsType) => <DatePicker {...args} />;
@@ -28,6 +30,8 @@ export const PrimaryWeekMode: StoryObj = (args: DatePickerPropsType) => <DatePic
 PrimaryWeekMode.args = {
     weekStartsOnSunday: false,
     weekMode: true,
+    minDate: new Date(2023, 0, 1),
+    maxDate: new Date(2024, 0, 31),
 };
 
 export const USACalendar: StoryObj = (args: DatePickerPropsType) => <DatePicker {...args} />;
@@ -35,6 +39,8 @@ export const USACalendar: StoryObj = (args: DatePickerPropsType) => <DatePicker 
 USACalendar.args = {
     weekStartsOnSunday: true,
     weekMode: false,
+    minDate: new Date(2023, 0, 1),
+    maxDate: new Date(2024, 0, 31),
 };
 
 export const USACalendarWeekMode: StoryObj = (args: DatePickerPropsType) => (
@@ -44,4 +50,6 @@ export const USACalendarWeekMode: StoryObj = (args: DatePickerPropsType) => (
 USACalendarWeekMode.args = {
     weekStartsOnSunday: true,
     weekMode: true,
+    minDate: new Date(2023, 0, 1),
+    maxDate: new Date(2024, 0, 31),
 };

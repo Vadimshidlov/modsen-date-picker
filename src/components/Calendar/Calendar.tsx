@@ -9,6 +9,9 @@ export function Calendar({
     dateCalendarValue,
     dispatch,
     weekMode,
+    minDate,
+    maxDate,
+    // withRange
 }: CalendarPropsType) {
     return weekMode ? (
         <CalendarWeekMode
@@ -16,6 +19,8 @@ export function Calendar({
             dateValue={dateValue}
             dateCalendarValue={dateCalendarValue}
             dispatch={dispatch}
+            minDate={minDate}
+            maxDate={maxDate}
         />
     ) : (
         <CalendarYearMode
@@ -23,6 +28,8 @@ export function Calendar({
             dateValue={dateValue}
             dateCalendarValue={dateCalendarValue}
             dispatch={dispatch}
+            minDate={minDate}
+            maxDate={maxDate}
         />
     );
 }

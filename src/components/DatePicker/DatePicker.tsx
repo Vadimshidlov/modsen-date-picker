@@ -17,8 +17,6 @@ export type DatePickerStateType = {
     calendarValue: string;
 };
 
-const WITH_RANGE = false;
-
 const initialPickerState = {
     datePickerFirstValue: "",
     datePickerSecondValue: "",
@@ -70,34 +68,62 @@ const reducer = (state = initialPickerState, action: DatePickerActionType) => {
 export type DatePickerPropsType = {
     weekStartsOnSunday: boolean;
     weekMode: boolean;
+    minDate: Date;
+    maxDate: Date;
 };
 
-// export function DatePicker({minValue, maxValue, reversWeek, weekMode, withRange}) {
-export function DatePicker({ weekStartsOnSunday, weekMode }: DatePickerPropsType) {
+export function DatePicker({
+    weekStartsOnSunday,
+    weekMode,
+    minDate,
+    maxDate,
+}: DatePickerPropsType) {
     const [isShowCalendar, setIsShowCalendar] = useState(false);
-    // const [weekStartsOnSunday] = useState(false);
     const [pickerState, dispatch] = useReducer(reducer, initialPickerState);
+
+    // handler (key) {
+    //  return fn (){
+    //
+    //  }
+    // }
 
     return (
         <DatePickerStyled>
             <GlobalStyles />
             <Flex margin="20px 0px 0px 0px">
+                {/*
+                From:
+                */}
+                {}
+
                 <DateInput
                     dispatch={dispatch}
+                    // dispatch={dispatch}
                     value={pickerState.datePickerFirstValue}
-                    // handleClearInput={handleClearInput}
-                    // handleInputChange={handleInputChange}
+                    setIsShowCalendar={setIsShowCalendar}
+                    minDate={minDate}
+                    maxDate={maxDate}
+                />
+
+                {/*
+                To:
+                <DateInput
+                    dispatch={dispatch}
+                    // dispatch={dispatch}
+                    value={pickerState.datePickerFirstValue}
                     setIsShowCalendar={setIsShowCalendar}
                 />
+                */}
             </Flex>
             {isShowCalendar && (
                 <Calendar
                     weekStartsOnSunday={weekStartsOnSunday}
                     dateValue={pickerState.datePickerFirstValue}
                     dateCalendarValue={pickerState.calendarValue}
-                    // handleSetDate={handleSetDate}
                     dispatch={dispatch}
                     weekMode={weekMode}
+                    minDate={minDate}
+                    maxDate={maxDate}
                 />
             )}
         </DatePickerStyled>

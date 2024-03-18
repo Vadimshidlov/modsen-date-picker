@@ -33,6 +33,8 @@ export type CalendarPropsType = {
     // handleSetDate: (dateValue: string) => void;
     dispatch: React.Dispatch<DatePickerActionType>;
     weekMode: boolean;
+    minDate: Date;
+    maxDate: Date;
     // handlePrevYear: () => void;
     // handleNextYear: () => void;
     // handlePrevMonth: () => void;

@@ -1,13 +1,14 @@
 import styled from "styled-components";
-import React, { ChangeEvent, FocusEvent, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Flex } from "@/components/Flex/index";
 import { ReactComponent as CalendarIcon } from "@/assets/svg/Calendar.svg";
 import { ReactComponent as ClearDateIcon } from "@/assets/svg/Clear.svg";
 import { validateDate } from "@/utils/date/index";
 import { TextError } from "@/components/Text/index";
 import { DatePickerActionType } from "@/components/DatePicker/DatePicker";
+import { validateInputMinMaxDate } from "@/utils/date/calendarDate";
 
-export const DateInputStyled = styled.input`
+export const DateInputStyled = styled.input<{ $isValid: boolean }>`
     outline: none;
     font-family: "Open Sans";
     font-weight: 400;
@@ -15,6 +16,7 @@ export const DateInputStyled = styled.input`
     line-height: normal;
     width: 80%;
     outline: none;
+    color: ${({ $isValid }) => ($isValid ? "inherit" : "red")};
 `;
 
 const StyledClearDateIcon = styled(ClearDateIcon)`
@@ -30,9 +32,17 @@ export type DateInputProps = {
     value: string;
     setIsShowCalendar: (value: React.SetStateAction<boolean>) => void;
     dispatch: React.Dispatch<DatePickerActionType>;
+    minDate: Date;
+    maxDate: Date;
 };
 
-export function DateInput({ value, dispatch, setIsShowCalendar }: DateInputProps) {
+export function DateInput({
+    value,
+    dispatch,
+    setIsShowCalendar,
+    minDate,
+    maxDate,
+}: DateInputProps) {
     const [validateError, setValidateError] = useState("");
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -100,6 +110,7 @@ export function DateInput({ value, dispatch, setIsShowCalendar }: DateInputProps
                     placeholder="Choose Date"
                     value={value}
                     onChange={handleInputChange}
+                    $isValid={validateInputMinMaxDate(minDate, maxDate, value)}
                 />
                 <Flex minWidth="15px">
                     {validateError === "" && value !== "" ? (

@@ -16,13 +16,20 @@ import { Text } from "@/components/Text";
 import { CurrentDayWeekButton, DayButton, DayWeekButton } from "@/components/DayButton";
 import { ReactComponent as PrevYearButton } from "@/assets/svg/prev-button.svg";
 import { ReactComponent as NextYearButton } from "@/assets/svg/next-button.svg";
-import { getInitialWeekNumber, getPreviousMonthWeeksCount } from "@/utils/date/calendarDate";
+import {
+    getInitialWeekNumber,
+    getPreviousMonthWeeksCount,
+    validateMaxDate,
+    validateMinDate,
+} from "@/utils/date/calendarDate";
 
-export type CalendarYearModePropsType = {
+export type CalendarWeekModePropsType = {
     weekStartsOnSunday: boolean;
     dateValue: string;
     dateCalendarValue: string;
     dispatch: React.Dispatch<DatePickerActionType>;
+    minDate: Date;
+    maxDate: Date;
 };
 
 export function CalendarWeekMode({
@@ -30,7 +37,9 @@ export function CalendarWeekMode({
     dateValue,
     dateCalendarValue,
     dispatch,
-}: CalendarYearModePropsType) {
+    minDate,
+    maxDate,
+}: CalendarWeekModePropsType) {
     const DAYS = weekStartsOnSunday ? REVERSE_DAYS : DEFAULT_DAYS;
     const [dayNumber, monthNumber, yearNumber] = getDateValues(dateValue);
     const [innerDayNumber, innerMonthNumber, innerYearNumber] = getDateValues(dateCalendarValue);
@@ -86,9 +95,6 @@ export function CalendarWeekMode({
 
     const handleNextWeek = () => {
         if (calendarItems && calendarItems.length / 7 > weekNumber + 1) {
-            console.log(calendarItems.length, "&& calendarItems.length");
-            console.log("handleNextWeek 1");
-
             setWeekNumber((prevWeek) => prevWeek + 1);
 
             return;
@@ -148,7 +154,16 @@ export function CalendarWeekMode({
                     calendarItems
                         .slice(weekNumber * 7, 7 + 7 * weekNumber)
                         .map((calendarItem, index) => {
-                            console.log(calendarItems, `calendarItems map`);
+                            if (
+                                validateMinDate(minDate, calendarItem) ||
+                                validateMaxDate(maxDate, calendarItem)
+                            ) {
+                                return (
+                                    <DayButton color="#AAAAAA" key={index.toString()} disabled>
+                                        {calendarItem.date}
+                                    </DayButton>
+                                );
+                            }
 
                             if (
                                 calendarItem.month === monthNumber &&
