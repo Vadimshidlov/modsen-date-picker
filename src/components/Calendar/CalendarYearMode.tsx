@@ -1,14 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 import React, { MouseEvent, useMemo } from "react";
 import { DEFAULT_DAYS, REVERSE_DAYS } from "@/constants";
-import {
-    getCurrentMonthDays,
-    getDateValues,
-    getDaysInAMonth,
-    getMontName,
-    getNextMonthDays,
-    getPreviousMonthDays,
-} from "@/utils/date";
 import { CalendarItemsType, DatePickerActionType } from "@/components/DatePicker/DatePicker";
 import { Flex } from "@/components/Flex";
 import { Button } from "@/components/Button";
@@ -19,6 +11,13 @@ import { ReactComponent as NextYearButton } from "@/assets/svg/next-button.svg";
 import { ReactComponent as PrevMonthButton } from "@/assets/svg/prev-month-button.svg";
 import { ReactComponent as NextMonthButton } from "@/assets/svg/next-month-button.svg";
 import {
+    getCurrentMonthDays,
+    getDateValueFromCalendarItem,
+    getDateValues,
+    getDaysInAMonth,
+    getMontName,
+    getNextMonthDays,
+    getPreviousMonthDays,
     isDateInRange,
     isNumbersExist,
     validateMaxDate,
@@ -35,6 +34,102 @@ export type CalendarYearModePropsType = {
     minDate: Date;
     maxDate: Date;
     withRange: boolean;
+    handleOpenTodo: (event: MouseEvent, calendarItem: CalendarItemsType) => void;
+};
+
+export type ChangeRangeDatePropsType = {
+    calendarItem: CalendarItemsType;
+    dispatch: (value: DatePickerActionType) => void;
+    dayNumber: number | undefined;
+    monthNumber: number | undefined;
+    yearNumber: number | undefined;
+    secondYearNumber: number | undefined;
+    secondMonthNumber: number | undefined;
+    secondDayNumber: number | undefined;
+};
+
+export const handleChangeRangeDate = ({
+    calendarItem,
+    dispatch,
+    yearNumber,
+    monthNumber,
+    dayNumber,
+    secondYearNumber,
+    secondMonthNumber,
+    secondDayNumber,
+}: ChangeRangeDatePropsType) => {
+    if (
+        !yearNumber &&
+        !monthNumber &&
+        !dayNumber &&
+        !secondYearNumber &&
+        !secondMonthNumber &&
+        !secondDayNumber
+    ) {
+        dispatch({
+            type: "SET_FIRST_CALENDAR_DATE",
+            payload: {
+                // dateValue: `${calendarItem.date}/${calendarItem.month + 1}/${calendarItem.year}`,
+                dateValue: getDateValueFromCalendarItem(calendarItem),
+            },
+        });
+
+        return;
+    }
+
+    if (!secondYearNumber && !secondMonthNumber && !secondDayNumber) {
+        dispatch({
+            type: "SET_SECOND_CALENDAR_DATE",
+            payload: {
+                dateValue: getDateValueFromCalendarItem(calendarItem),
+            },
+        });
+
+        return;
+    }
+
+    if (
+        new Date(calendarItem.year, calendarItem.month, calendarItem.date) <
+            new Date(secondYearNumber!, secondMonthNumber!, secondDayNumber!) &&
+        new Date(calendarItem.year, calendarItem.month, calendarItem.date) >
+            new Date(yearNumber!, monthNumber!, dayNumber!)
+    ) {
+        console.log("Second Dispatch");
+
+        dispatch({
+            type: "SET_SECOND_CALENDAR_DATE",
+            payload: {
+                // dateValue: `${calendarItem.date}/${calendarItem.month + 1}/${calendarItem.year}`,
+                dateValue: getDateValueFromCalendarItem(calendarItem),
+            },
+        });
+
+        return;
+    }
+
+    if (
+        new Date(calendarItem.year, calendarItem.month, calendarItem.date) >
+        new Date(secondYearNumber!, secondMonthNumber!, secondDayNumber!)
+    ) {
+        dispatch({
+            type: "SET_SECOND_CALENDAR_DATE",
+            payload: {
+                dateValue: getDateValueFromCalendarItem(calendarItem),
+            },
+        });
+
+        return;
+    }
+
+    console.log("The Third Dispatch");
+
+    dispatch({
+        type: "SET_FIRST_CALENDAR_DATE",
+        payload: {
+            // dateValue: `${calendarItem.date}/${calendarItem.month + 1}/${calendarItem.year}`,
+            dateValue: getDateValueFromCalendarItem(calendarItem),
+        },
+    });
 };
 
 export function CalendarYearMode({
@@ -46,6 +141,7 @@ export function CalendarYearMode({
     minDate,
     maxDate,
     withRange,
+    handleOpenTodo,
 }: CalendarYearModePropsType) {
     const DAYS = weekStartsOnSunday ? REVERSE_DAYS : DEFAULT_DAYS;
     const [dayNumber, monthNumber, yearNumber] = getDateValues(dateValue);
@@ -185,22 +281,12 @@ export function CalendarYearMode({
                                     calendarItem.month === monthNumber &&
                                     calendarItem.year === yearNumber
                                 ) {
-                                    console.log("I have found start range");
-
                                     return (
                                         <StartRangeButton
                                             key={index.toString()}
-                                            onClick={() => {
-                                                dispatch({
-                                                    type: "SET_CALENDAR_AND_PICKER_DATE",
-                                                    payload: {
-                                                        dateValue: `${calendarItem.date}/${calendarItem.month + 1}/${calendarItem.year}`,
-                                                    },
-                                                });
-                                            }}
-                                            onContextMenu={(e: MouseEvent) => {
-                                                e.preventDefault();
-                                            }}
+                                            onContextMenu={(e: MouseEvent) =>
+                                                handleOpenTodo(e, calendarItem)
+                                            }
                                         >
                                             {calendarItem.date}
                                         </StartRangeButton>
@@ -220,22 +306,20 @@ export function CalendarYearMode({
                                     calendarItem.month === secondMonthNumber &&
                                     calendarItem.year === secondYearNumber
                                 ) {
-                                    console.log("I have found end range");
-
                                     return (
                                         <EndRangeButton
                                             key={index.toString()}
-                                            onClick={() => {
-                                                dispatch({
-                                                    type: "SET_CALENDAR_AND_PICKER_DATE",
-                                                    payload: {
-                                                        dateValue: `${calendarItem.date}/${calendarItem.month + 1}/${calendarItem.year}`,
-                                                    },
-                                                });
-                                            }}
-                                            onContextMenu={(e: MouseEvent) => {
-                                                e.preventDefault();
-                                            }}
+                                            // onClick={() => {
+                                            //     dispatch({
+                                            //         type: "SET_CALENDAR_AND_PICKER_DATE",
+                                            //         payload: {
+                                            //             dateValue: `${calendarItem.date}/${calendarItem.month + 1}/${calendarItem.year}`,
+                                            //         },
+                                            //     });
+                                            // }}
+                                            onContextMenu={(e: MouseEvent) =>
+                                                handleOpenTodo(e, calendarItem)
+                                            }
                                         >
                                             {calendarItem.date}
                                         </EndRangeButton>
@@ -268,16 +352,32 @@ export function CalendarYearMode({
                                     <RangeButton
                                         key={index.toString()}
                                         onClick={() => {
+                                            if (withRange) {
+                                                handleChangeRangeDate({
+                                                    calendarItem,
+                                                    dispatch,
+                                                    yearNumber,
+                                                    monthNumber,
+                                                    dayNumber,
+                                                    secondYearNumber,
+                                                    secondMonthNumber,
+                                                    secondDayNumber,
+                                                });
+
+                                                return;
+                                            }
+
                                             dispatch({
                                                 type: "SET_CALENDAR_AND_PICKER_DATE",
                                                 payload: {
-                                                    dateValue: `${calendarItem.date}/${calendarItem.month + 1}/${calendarItem.year}`,
+                                                    dateValue:
+                                                        getDateValueFromCalendarItem(calendarItem),
                                                 },
                                             });
                                         }}
-                                        onContextMenu={(e: MouseEvent) => {
-                                            e.preventDefault();
-                                        }}
+                                        onContextMenu={(e: MouseEvent) =>
+                                            handleOpenTodo(e, calendarItem)
+                                        }
                                     >
                                         {calendarItem.date}
                                     </RangeButton>
@@ -297,32 +397,49 @@ export function CalendarYearMode({
                                         dispatch({
                                             type: "SET_CALENDAR_AND_PICKER_DATE",
                                             payload: {
-                                                dateValue: `${calendarItem.date}/${calendarItem.month + 1}/${calendarItem.year}`,
+                                                dateValue:
+                                                    getDateValueFromCalendarItem(calendarItem),
+                                                // dateValue: `${calendarItem.date}/${calendarItem.month + 1}/${calendarItem.year}`,
                                             },
                                         });
                                     }}
-                                    onContextMenu={(e: MouseEvent) => {
-                                        e.preventDefault();
-                                    }}
+                                    onContextMenu={(e: MouseEvent) =>
+                                        handleOpenTodo(e, calendarItem)
+                                    }
                                 >
                                     {calendarItem.date}
                                 </CurrentDayWeekButton>
                             );
                         }
 
-                        return Number.isInteger(monthNumber) &&
-                            calendarItem.month !== innerMonthNumber ? (
+                        return calendarItem.month !== innerMonthNumber ? (
                             <DayButton
                                 color="#AAAAAA"
                                 key={index.toString()}
                                 onClick={() => {
+                                    if (withRange) {
+                                        handleChangeRangeDate({
+                                            calendarItem,
+                                            dispatch,
+                                            yearNumber,
+                                            monthNumber,
+                                            dayNumber,
+                                            secondYearNumber,
+                                            secondMonthNumber,
+                                            secondDayNumber,
+                                        });
+
+                                        return;
+                                    }
+
                                     dispatch({
                                         type: "SET_CALENDAR_AND_PICKER_DATE",
                                         payload: {
-                                            dateValue: `${calendarItem.date}/${calendarItem.month + 1}/${calendarItem.year}`,
+                                            dateValue: getDateValueFromCalendarItem(calendarItem),
                                         },
                                     });
                                 }}
+                                onContextMenu={(e: MouseEvent) => handleOpenTodo(e, calendarItem)}
                             >
                                 {calendarItem.date}
                             </DayButton>
@@ -330,13 +447,29 @@ export function CalendarYearMode({
                             <DayButton
                                 key={index.toString()}
                                 onClick={() => {
+                                    if (withRange) {
+                                        handleChangeRangeDate({
+                                            calendarItem,
+                                            dispatch,
+                                            yearNumber,
+                                            monthNumber,
+                                            dayNumber,
+                                            secondYearNumber,
+                                            secondMonthNumber,
+                                            secondDayNumber,
+                                        });
+
+                                        return;
+                                    }
+
                                     dispatch({
                                         type: "SET_CALENDAR_AND_PICKER_DATE",
                                         payload: {
-                                            dateValue: `${calendarItem.date}/${calendarItem.month + 1}/${calendarItem.year}`,
+                                            dateValue: getDateValueFromCalendarItem(calendarItem),
                                         },
                                     });
                                 }}
+                                onContextMenu={(e: MouseEvent) => handleOpenTodo(e, calendarItem)}
                             >
                                 {calendarItem.date}
                             </DayButton>
@@ -346,18 +479,3 @@ export function CalendarYearMode({
         </Flex>
     );
 }
-
-/**
- list = [
- {
-     date: "12/11/2023",
-     todos: [
-     {title: "", complete: ""}
- ]
- }
-
- ]
-
-
-
- */

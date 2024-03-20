@@ -53,3 +53,17 @@ export const TextError = styled(Text)`
     font-size: 15px;
     text-align: center;
 `;
+
+export const TextUnderline = styled(Text)`
+    font-weight: 400;
+    font-size: 15px;
+    text-align: center;
+    text-decoration: line-through;
+`;
+
+export const TextTitle = styled(Text)`
+    font-weight: 600;
+    font-size: 25px;
+    text-align: center;
+    margin-bottom: 20px;
+`;

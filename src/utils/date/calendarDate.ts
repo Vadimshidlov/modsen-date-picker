@@ -219,3 +219,35 @@ export const isDateInRange = (
         new Date(yearNumber!, monthNumber!, dayNumber!) &&
     new Date(calendarItem.year, calendarItem.month, calendarItem.date) <
         new Date(secondYearNumber!, secondMonthNumber!, secondDayNumber!);
+
+export const getDateValueFromCalendarItem = (calendarItem: CalendarItemsType) => {
+    const day = calendarItem.date < 10 ? `0${calendarItem.date}` : `${calendarItem.date}`;
+    const month =
+        calendarItem.month + 1 < 10 ? `0${calendarItem.month + 1}` : `${calendarItem.month + 1}`;
+    const { year } = calendarItem;
+
+    return `${day}/${month}/${year}`;
+};
+
+export const isFirstDayInRange = (
+    calendarItem: CalendarItemsType,
+    dayNumber: number | undefined,
+    monthNumber: number | undefined,
+    yearNumber: number | undefined,
+) =>
+    Number.isInteger(dayNumber) &&
+    Number.isInteger(monthNumber) &&
+    Number.isInteger(yearNumber) &&
+    calendarItem.date === dayNumber &&
+    calendarItem.month === monthNumber &&
+    calendarItem.year === yearNumber;
+
+export const isLastDayInRange = (
+    calendarItem: CalendarItemsType,
+    secondDayNumber: number | undefined,
+    secondMonthNumber: number | undefined,
+    secondYearNumber: number | undefined,
+) =>
+    calendarItem.date === secondDayNumber &&
+    calendarItem.month === secondMonthNumber &&
+    calendarItem.year === secondYearNumber;

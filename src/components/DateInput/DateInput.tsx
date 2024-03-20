@@ -5,7 +5,7 @@ import { ReactComponent as CalendarIcon } from "@/assets/svg/Calendar.svg";
 import { ReactComponent as ClearDateIcon } from "@/assets/svg/Clear.svg";
 import { validateDate } from "@/utils/date/index";
 import { TextError } from "@/components/Text/index";
-import { DatePickerActionType } from "@/components/DatePicker/DatePicker";
+import { DatePickerActionType, getCurrentDate } from "@/components/DatePicker/DatePicker";
 import { validateInputMinMaxDate } from "@/utils/date/calendarDate";
 
 export const DateInputStyled = styled.input<{ $isValid: boolean }>`
@@ -60,6 +60,8 @@ export function DateInput({
         }
 
         if ((isWithRange && isFirstDate) || !isWithRange) {
+            // if (!validateDate(inputValue)) return;
+
             dispatch({
                 type: "SET_CALENDAR_AND_PICKER_DATE",
                 payload: {
@@ -81,13 +83,14 @@ export function DateInput({
     const handleClearInputDate = () => {
         if ((isWithRange && isFirstDate) || !isWithRange) {
             dispatch({
-                type: "SET_CALENDAR_AND_PICKER_DATE",
+                // type: "SET_CALENDAR_AND_PICKER_DATE",
+                type: "СLEAR_CALENDAR_AND_PICKER_DATE",
                 payload: {
                     dateValue: "",
                 },
             });
 
-            setIsShowCalendar(false);
+            // setIsShowCalendar(false);
         }
 
         dispatch({
@@ -102,25 +105,6 @@ export function DateInput({
         console.log(validateError);
     }, [validateError]);
 
-    useEffect(() => {
-        if (value === "") {
-            setValidateError("");
-            return;
-        }
-
-        if (!validateDate(value)) {
-            if (!isFirstDate) return;
-
-            setValidateError("Date should be in DD/MM/YYYY format.");
-            setIsShowCalendar(false);
-        } else {
-            if (!isFirstDate) return;
-
-            setValidateError("");
-            setIsShowCalendar(true);
-        }
-    }, [isFirstDate, setIsShowCalendar, value]);
-
     return (
         <Flex direction="column" maxWidth="250px">
             <Flex
@@ -132,7 +116,7 @@ export function DateInput({
                 columnGap="8px"
                 margin="0 0 8px 0"
             >
-                <CalendarIcon />
+                <CalendarIcon onClick={() => setIsShowCalendar((prev) => !prev)} />
                 <DateInputStyled
                     type="text"
                     placeholder="Choose Date"

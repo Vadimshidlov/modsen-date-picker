@@ -3,11 +3,14 @@ import React, { MouseEvent, useMemo, useState } from "react";
 import { DEFAULT_DAYS, REVERSE_DAYS } from "@/constants";
 import {
     getCurrentMonthDays,
+    getDateValueFromCalendarItem,
     getDateValues,
     getDaysInAMonth,
     getMontName,
     getNextMonthDays,
     getPreviousMonthDays,
+    isDateInRange,
+    isNumbersExist,
 } from "@/utils/date";
 import { CalendarItemsType, DatePickerActionType } from "@/components/DatePicker/DatePicker";
 import { Flex } from "@/components/Flex";
@@ -19,33 +22,42 @@ import { ReactComponent as NextYearButton } from "@/assets/svg/next-button.svg";
 import {
     getInitialWeekNumber,
     getPreviousMonthWeeksCount,
+    isFirstDayInRange,
+    isLastDayInRange,
     validateMaxDate,
     validateMinDate,
 } from "@/utils/date/calendarDate";
+import { EndRangeButton, RangeButton, StartRangeButton } from "@/components/DayButton/DayButton";
+import { handleChangeRangeDate } from "@/components/Calendar/CalendarYearMode";
+import { ClearButton } from "@/components/Button/Button";
 
 export type CalendarWeekModePropsType = {
     weekStartsOnSunday: boolean;
     dateValue: string;
+    dateSecondValue: string;
     dateCalendarValue: string;
     dispatch: React.Dispatch<DatePickerActionType>;
     minDate: Date;
     maxDate: Date;
     withRange: boolean;
+    handleOpenTodo: (event: MouseEvent, calendarItem: CalendarItemsType) => void;
 };
 
 export function CalendarWeekMode({
     weekStartsOnSunday,
     dateValue,
+    dateSecondValue,
     dateCalendarValue,
     dispatch,
     minDate,
     maxDate,
     withRange,
+    handleOpenTodo,
 }: CalendarWeekModePropsType) {
     const DAYS = weekStartsOnSunday ? REVERSE_DAYS : DEFAULT_DAYS;
     const [dayNumber, monthNumber, yearNumber] = getDateValues(dateValue);
+    const [secondDayNumber, secondMonthNumber, secondYearNumber] = getDateValues(dateSecondValue);
     const [innerDayNumber, innerMonthNumber, innerYearNumber] = getDateValues(dateCalendarValue);
-    // const [weekNumber, setWeekNumber] = useState(0);
     const [weekNumber, setWeekNumber] = useState(() =>
         getInitialWeekNumber(dateCalendarValue, weekStartsOnSunday),
     );
@@ -102,8 +114,6 @@ export function CalendarWeekMode({
             return;
         }
 
-        console.log("handleNextWeek 2");
-
         const [day, month, year] = dateCalendarValue.split("/");
 
         if (day && month && year) {
@@ -134,9 +144,13 @@ export function CalendarWeekMode({
                         <PrevYearButton />
                     </Button>
                 </Flex>
-                <Text>
-                    {getMontName(dateCalendarValue)} {innerYearNumber}
-                </Text>
+                <Flex direction="column" align="center" justify="center">
+                    <Text>
+                        {getMontName(dateCalendarValue)} {innerYearNumber}
+                    </Text>
+                    <Text>Week: {weekNumber + 1}</Text>
+                </Flex>
+
                 <Flex columnGap="8px" align="center">
                     <Button onClick={handleNextWeek}>
                         {null}
@@ -168,6 +182,92 @@ export function CalendarWeekMode({
                             }
 
                             if (
+                                withRange &&
+                                isFirstDayInRange(calendarItem, dayNumber, monthNumber, yearNumber)
+                            ) {
+                                return (
+                                    <StartRangeButton
+                                        key={index.toString()}
+                                        onContextMenu={(e: MouseEvent) =>
+                                            handleOpenTodo(e, calendarItem)
+                                        }
+                                    >
+                                        {calendarItem.date}
+                                    </StartRangeButton>
+                                );
+                            }
+
+                            if (
+                                withRange &&
+                                isDateInRange(
+                                    calendarItem,
+                                    yearNumber,
+                                    monthNumber,
+                                    dayNumber,
+                                    secondYearNumber,
+                                    secondMonthNumber,
+                                    secondDayNumber,
+                                )
+                            ) {
+                                return (
+                                    <RangeButton
+                                        key={index.toString()}
+                                        onClick={() => {
+                                            if (withRange) {
+                                                handleChangeRangeDate({
+                                                    calendarItem,
+                                                    dispatch,
+                                                    yearNumber,
+                                                    monthNumber,
+                                                    dayNumber,
+                                                    secondYearNumber,
+                                                    secondMonthNumber,
+                                                    secondDayNumber,
+                                                });
+
+                                                return;
+                                            }
+
+                                            dispatch({
+                                                type: "SET_CALENDAR_AND_PICKER_DATE",
+                                                payload: {
+                                                    // dateValue: `${calendarItem.date}/${calendarItem.month + 1}/${calendarItem.year}`,
+                                                    dateValue:
+                                                        getDateValueFromCalendarItem(calendarItem),
+                                                },
+                                            });
+                                        }}
+                                        onContextMenu={(e: MouseEvent) =>
+                                            handleOpenTodo(e, calendarItem)
+                                        }
+                                    >
+                                        {calendarItem.date}
+                                    </RangeButton>
+                                );
+                            }
+
+                            if (
+                                withRange &&
+                                isLastDayInRange(
+                                    calendarItem,
+                                    secondDayNumber,
+                                    secondMonthNumber,
+                                    secondYearNumber,
+                                )
+                            ) {
+                                return (
+                                    <EndRangeButton
+                                        key={index.toString()}
+                                        onContextMenu={(e: MouseEvent) =>
+                                            handleOpenTodo(e, calendarItem)
+                                        }
+                                    >
+                                        {calendarItem.date}
+                                    </EndRangeButton>
+                                );
+                            }
+
+                            if (
                                 calendarItem.month === monthNumber &&
                                 calendarItem.year === yearNumber &&
                                 calendarItem.date === dayNumber
@@ -179,39 +279,60 @@ export function CalendarWeekMode({
                                             dispatch({
                                                 type: "SET_CALENDAR_AND_PICKER_DATE",
                                                 payload: {
-                                                    dateValue: `${calendarItem.date}/${calendarItem.month + 1}/${calendarItem.year}`,
+                                                    dateValue:
+                                                        getDateValueFromCalendarItem(calendarItem),
                                                 },
                                             });
                                         }}
-                                        onContextMenu={(e: MouseEvent) => {
-                                            e.preventDefault();
-                                        }}
+                                        onContextMenu={(e: MouseEvent) =>
+                                            handleOpenTodo(e, calendarItem)
+                                        }
                                     >
                                         {calendarItem.date}
                                     </CurrentDayWeekButton>
                                 );
                             }
 
-                            return Number.isInteger(monthNumber) &&
-                                calendarItem.month !== innerMonthNumber ? (
+                            return calendarItem.month !== innerMonthNumber ? (
                                 <DayButton
                                     color="#AAAAAA"
                                     key={index.toString()}
                                     onClick={() => {
+                                        const currentDayDateValue =
+                                            getDateValueFromCalendarItem(calendarItem);
+
+                                        if (withRange) {
+                                            handleChangeRangeDate({
+                                                calendarItem,
+                                                dispatch,
+                                                yearNumber,
+                                                monthNumber,
+                                                dayNumber,
+                                                secondYearNumber,
+                                                secondMonthNumber,
+                                                secondDayNumber,
+                                            });
+
+                                            return;
+                                        }
+
                                         dispatch({
                                             type: "SET_CALENDAR_AND_PICKER_DATE",
                                             payload: {
-                                                dateValue: `${calendarItem.date}/${calendarItem.month + 1}/${calendarItem.year}`,
+                                                dateValue: currentDayDateValue,
                                             },
                                         });
 
                                         setWeekNumber(
                                             getInitialWeekNumber(
-                                                `${calendarItem.date}/${calendarItem.month + 1}/${calendarItem.year}`,
+                                                currentDayDateValue,
                                                 weekStartsOnSunday,
                                             ),
                                         );
                                     }}
+                                    onContextMenu={(e: MouseEvent) =>
+                                        handleOpenTodo(e, calendarItem)
+                                    }
                                 >
                                     {calendarItem.date}
                                 </DayButton>
@@ -219,20 +340,41 @@ export function CalendarWeekMode({
                                 <DayButton
                                     key={index.toString()}
                                     onClick={() => {
+                                        if (withRange) {
+                                            handleChangeRangeDate({
+                                                calendarItem,
+                                                dispatch,
+                                                yearNumber,
+                                                monthNumber,
+                                                dayNumber,
+                                                secondYearNumber,
+                                                secondMonthNumber,
+                                                secondDayNumber,
+                                            });
+
+                                            return;
+                                        }
+
+                                        const currentDayDateValue =
+                                            getDateValueFromCalendarItem(calendarItem);
+
                                         dispatch({
                                             type: "SET_CALENDAR_AND_PICKER_DATE",
                                             payload: {
-                                                dateValue: `${calendarItem.date}/${calendarItem.month + 1}/${calendarItem.year}`,
+                                                dateValue: currentDayDateValue,
                                             },
                                         });
 
                                         setWeekNumber(
                                             getInitialWeekNumber(
-                                                `${calendarItem.date}/${calendarItem.month + 1}/${calendarItem.year}`,
+                                                currentDayDateValue,
                                                 weekStartsOnSunday,
                                             ),
                                         );
                                     }}
+                                    onContextMenu={(e: MouseEvent) =>
+                                        handleOpenTodo(e, calendarItem)
+                                    }
                                 >
                                     {calendarItem.date}
                                 </DayButton>

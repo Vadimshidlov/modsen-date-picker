@@ -101,9 +101,3 @@ export const RangeButton = styled(DayButton)`
     font-size: 14px;
     border-radius: 0px 0px 0px 0px;
 `;
-
-// export function DayButton(props: DayButtonProps) {
-//     const { children } = props;
-//
-//     return <StyledDayButton {...props}>{children}</StyledDayButton>;
-// }
