@@ -25,16 +25,13 @@ export type ButtonPropsType = {
 };
 
 export type CalendarPropsType = {
-    // calendarItems: CalendarItemsType[];
     weekStartsOnSunday: boolean;
     dateValue: string;
+    dateSecondValue: string;
     dateCalendarValue: string;
-    // calendarValue: string;
-    // handleSetDate: (dateValue: string) => void;
     dispatch: React.Dispatch<DatePickerActionType>;
     weekMode: boolean;
-    // handlePrevYear: () => void;
-    // handleNextYear: () => void;
-    // handlePrevMonth: () => void;
-    // handleNextMonth: () => void;
+    minDate: Date;
+    maxDate: Date;
+    withRange: boolean;
 };

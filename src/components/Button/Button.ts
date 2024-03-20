@@ -23,3 +23,25 @@ export const Button = styled.button<ButtonPropsType>`
     row-gap: ${(props) => props.rowGap || ""};
     column-gap: ${(props) => props.columnGap || ""};
 `;
+
+export const ClearButton = styled.button`
+    weight: 250px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Open Sans";
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid #e1e1e1;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    transition: all 0.5s;
+
+    &:hover {
+        //border: 2px solid #e1e1e1;
+        background-color: #e1e1e1;
+    }
+`;

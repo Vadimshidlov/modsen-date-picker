@@ -7,4 +7,12 @@ export {
     getDateValues,
     getMontName,
     getMontNumber,
+    getDateValueFromCalendarItem,
+    validateMaxDate,
+    isDateInRange,
+    validateMinDate,
+    validateInputMinMaxDate,
+    getInitialWeekNumber,
+    isNumbersExist,
+    getPreviousMonthWeeksCount,
 } from "@/utils/date/calendarDate";

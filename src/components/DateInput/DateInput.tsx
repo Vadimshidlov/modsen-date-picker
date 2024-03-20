@@ -1,13 +1,14 @@
 import styled from "styled-components";
-import React, { ChangeEvent, FocusEvent, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Flex } from "@/components/Flex/index";
 import { ReactComponent as CalendarIcon } from "@/assets/svg/Calendar.svg";
 import { ReactComponent as ClearDateIcon } from "@/assets/svg/Clear.svg";
 import { validateDate } from "@/utils/date/index";
 import { TextError } from "@/components/Text/index";
-import { DatePickerActionType } from "@/components/DatePicker/DatePicker";
+import { DatePickerActionType, getCurrentDate } from "@/components/DatePicker/DatePicker";
+import { validateInputMinMaxDate } from "@/utils/date/calendarDate";
 
-export const DateInputStyled = styled.input`
+export const DateInputStyled = styled.input<{ $isValid: boolean }>`
     outline: none;
     font-family: "Open Sans";
     font-weight: 400;
@@ -15,6 +16,7 @@ export const DateInputStyled = styled.input`
     line-height: normal;
     width: 80%;
     outline: none;
+    color: ${({ $isValid }) => ($isValid ? "inherit" : "red")};
 `;
 
 const StyledClearDateIcon = styled(ClearDateIcon)`
@@ -30,9 +32,21 @@ export type DateInputProps = {
     value: string;
     setIsShowCalendar: (value: React.SetStateAction<boolean>) => void;
     dispatch: React.Dispatch<DatePickerActionType>;
+    minDate: Date;
+    maxDate: Date;
+    isWithRange: boolean;
+    isFirstDate: boolean;
 };
 
-export function DateInput({ value, dispatch, setIsShowCalendar }: DateInputProps) {
+export function DateInput({
+    value,
+    dispatch,
+    setIsShowCalendar,
+    minDate,
+    maxDate,
+    isFirstDate,
+    isWithRange,
+}: DateInputProps) {
     const [validateError, setValidateError] = useState("");
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -45,8 +59,21 @@ export function DateInput({ value, dispatch, setIsShowCalendar }: DateInputProps
             inputValue = `${inputValue.slice(0, 2)}/${inputValue.slice(2)}`;
         }
 
+        if ((isWithRange && isFirstDate) || !isWithRange) {
+            // if (!validateDate(inputValue)) return;
+
+            dispatch({
+                type: "SET_CALENDAR_AND_PICKER_DATE",
+                payload: {
+                    dateValue: inputValue,
+                },
+            });
+
+            return;
+        }
+
         dispatch({
-            type: "SET_CALENDAR_AND_PICKER_DATE",
+            type: "SET_SECOND_CALENDAR_DATE",
             payload: {
                 dateValue: inputValue,
             },
@@ -54,34 +81,29 @@ export function DateInput({ value, dispatch, setIsShowCalendar }: DateInputProps
     };
 
     const handleClearInputDate = () => {
+        if ((isWithRange && isFirstDate) || !isWithRange) {
+            dispatch({
+                // type: "SET_CALENDAR_AND_PICKER_DATE",
+                type: "СLEAR_CALENDAR_AND_PICKER_DATE",
+                payload: {
+                    dateValue: "",
+                },
+            });
+
+            // setIsShowCalendar(false);
+        }
+
         dispatch({
-            type: "SET_CALENDAR_AND_PICKER_DATE",
+            type: "CLEAR_SECOND_CALENDAR_DATE",
             payload: {
                 dateValue: "",
             },
         });
-
-        setIsShowCalendar(false);
     };
 
     useEffect(() => {
         console.log(validateError);
     }, [validateError]);
-
-    useEffect(() => {
-        if (value === "") {
-            setValidateError("");
-            return;
-        }
-
-        if (!validateDate(value)) {
-            setValidateError("Date should be in DD/MM/YYYY format.");
-            setIsShowCalendar(false);
-        } else {
-            setValidateError("");
-            setIsShowCalendar(true);
-        }
-    }, [setIsShowCalendar, value]);
 
     return (
         <Flex direction="column" maxWidth="250px">
@@ -94,12 +116,13 @@ export function DateInput({ value, dispatch, setIsShowCalendar }: DateInputProps
                 columnGap="8px"
                 margin="0 0 8px 0"
             >
-                <CalendarIcon />
+                <CalendarIcon onClick={() => setIsShowCalendar((prev) => !prev)} />
                 <DateInputStyled
                     type="text"
                     placeholder="Choose Date"
                     value={value}
                     onChange={handleInputChange}
+                    $isValid={validateInputMinMaxDate(minDate, maxDate, value)}
                 />
                 <Flex minWidth="15px">
                     {validateError === "" && value !== "" ? (
