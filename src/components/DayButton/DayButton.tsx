@@ -1,31 +1,7 @@
-import { ReactNode } from "react";
 import styled from "styled-components";
+import { DayButtonPropsType } from "@/types";
 
-interface DayButtonProps {
-    direction?: "row" | "column";
-    align?: "flex-start" | "flex-end" | "center" | "stretch";
-    justify?:
-        | "flex-start"
-        | "flex-end"
-        | "center"
-        | "space-between"
-        | "space-around"
-        | "space-evenly";
-    margin?: string;
-    color?: string;
-    border?: string;
-    borderRadius?: string;
-    padding?: string;
-    width?: string;
-    maxWidth?: string;
-    minWidth?: string;
-    height?: string;
-    rowGap?: string;
-    columnGap?: string;
-    children: ReactNode;
-}
-
-export const DayButton = styled.button<DayButtonProps>`
+export const DayButton = styled.button<DayButtonPropsType>`
     display: flex;
     font-family: "Open Sans";
     font-weight: 600;
@@ -96,7 +72,6 @@ export const RangeButton = styled(DayButton)`
     padding: 7px 9px;
     color: #2f80ed;
     background-color: #2f80ed1a;
-
     line-height: 19px;
     font-size: 14px;
     border-radius: 0px 0px 0px 0px;

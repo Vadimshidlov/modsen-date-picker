@@ -1,29 +1,12 @@
 import React from "react";
-import styled from "styled-components";
 import { Text, TextUnderline } from "@/components/Text/Text";
-import { TodoDataType } from "@/services/TodoService";
-import { TodoRemoveButton } from "@/components/TodoModal/TodoForm";
-
-export type TodoItemPropsType = {
-    todoItem: TodoDataType;
-    todoItemDate: string;
-    handleChangeTodoStatus: (todoDate: string, todoId: string) => void;
-    handleRemoveTodo: (todoDate: string, todoId: string) => void;
-};
-
-export const TodoItemContainer = styled.li`
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-`;
-
-export const TodoItemTitleContainer = styled.div`
-    display: flex;
-    align-items: center;
-    column-gap: 10px;
-`;
-
-export const ToggleTodoInput = styled.input``;
+import {
+    TodoItemContainer,
+    TodoItemTitleContainer,
+    TodoRemoveButton,
+    ToggleTodoInput,
+} from "@/components/TodoModal/index";
+import { TodoItemPropsType } from "@/types";
 
 export function TodoItem({
     todoItem,

@@ -1,5 +1,10 @@
 import styled from "styled-components";
 
+export const Flex = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
 export const DatePickerStyled = styled.div`
     position: relative;
     display: flex;
@@ -14,4 +19,8 @@ export const DatePickerStyled = styled.div`
         font-weight: normal;
         font-style: normal;
     }
+`;
+
+export const DatePickerFormContainer = styled(Flex)`
+    margin: 20px 0px 0px 0px;
 `;

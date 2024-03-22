@@ -15,4 +15,7 @@ export {
     getInitialWeekNumber,
     isNumbersExist,
     getPreviousMonthWeeksCount,
+    getCurrentDate,
+    isFirstDayInRange,
+    isLastDayInRange,
 } from "@/utils/date/calendarDate";

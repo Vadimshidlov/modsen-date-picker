@@ -1,10 +1,8 @@
-/* eslint-disable react/no-array-index-key */
-import { MouseEvent } from "react";
-import { CalendarPropsType } from "@/types";
+import { CalendarItemsType, CalendarPropsType } from "@/types";
 import { CalendarYearMode } from "@/components/Calendar/CalendarYearMode";
 import { CalendarWeekMode } from "@/components/Calendar/CalendarWeekMode";
-import { CalendarItemsType } from "@/components/DatePicker/DatePicker";
 import { getDateValueFromCalendarItem } from "@/utils/date";
+import { SET_TODO_DATE } from "@/constants";
 
 export function Calendar({
     weekStartsOnSunday,
@@ -17,11 +15,9 @@ export function Calendar({
     maxDate,
     withRange,
 }: CalendarPropsType) {
-    const handleOpenTodo = (event: MouseEvent, calendarItem: CalendarItemsType) => {
-        event.preventDefault();
-
+    const handleOpenTodo = (calendarItem: CalendarItemsType) => {
         dispatch({
-            type: "SET_TODO_DATE",
+            type: SET_TODO_DATE,
             payload: {
                 dateValue: getDateValueFromCalendarItem(calendarItem),
             },

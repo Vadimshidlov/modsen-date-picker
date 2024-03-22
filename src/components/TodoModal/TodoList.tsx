@@ -1,21 +1,6 @@
 import React from "react";
-import styled from "styled-components";
-import { TodoItem } from "@/components/TodoModal/index";
-import { TodoDataType } from "@/services/TodoService";
-
-export type TodoListPropsType = {
-    todoItemDate: string;
-    todos: TodoDataType[];
-    handleChangeTodoStatus: (todoDate: string, todoId: string) => void;
-    handleRemoveTodo: (todoDate: string, todoId: string) => void;
-};
-
-export const TodoListContainer = styled.ul`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    row-gap: 10px;
-`;
+import { TodoItem, TodoListContainer } from "@/components/TodoModal/index";
+import { TodoListPropsType } from "@/types";
 
 export function TodoList({
     todoItemDate,

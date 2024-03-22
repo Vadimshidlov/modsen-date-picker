@@ -60,6 +60,7 @@ module.exports = {
         "@typescript-eslint/naming-convention": "off",
         "no-restricted-exports": "off",
         "react/require-default-props": "off",
+        "react/no-array-index-key": "off",
         "@typescript-eslint/no-unused-vars": "off",
     },
 };
