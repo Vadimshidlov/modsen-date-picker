@@ -10,6 +10,11 @@ export const Flex = styled.div`
     flex-direction: column;
 `;
 
+export const DaysTitleContainer = styled(Flex)`
+    flex-direction: row;
+    justify-content: center;
+`;
+
 export const CalendarContainer = styled(Flex)`
     width: 250px;
     padding: 10px;

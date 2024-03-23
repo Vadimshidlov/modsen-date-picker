@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import {
+    BUTTON_TYPE_INVALID_DAY,
     DEFAULT_DAYS,
     REVERSE_DAYS,
     SET_CALENDAR_AND_PICKER_DATE,
@@ -24,9 +25,11 @@ import {
     getNextMonthDays,
     getPreviousMonthDays,
     isDateInRange,
-    isDatesExist,
+    isDayOff,
     isFirstDayInRange,
+    isHoliday,
     isLastDayInRange,
+    isToday,
     isValidRange,
     validateMaxDate,
     validateMinDate,
@@ -49,6 +52,7 @@ import {
 } from "@/constants/index";
 import { CalendarItemsType, CalendarYearModePropsType, ChangeRangeDatePropsType } from "@/types";
 import { handleChangeRangeDate } from "@/utils/handlers";
+import { DaysTitleContainer } from "@/components/Calendar/index";
 
 export function CalendarYearMode({
     weekStartsOnSunday,
@@ -60,13 +64,25 @@ export function CalendarYearMode({
     maxDate,
     withRange,
     handleOpenTodo,
+    withHolidays,
+    holidaysList,
 }: CalendarYearModePropsType) {
     const DAYS = weekStartsOnSunday ? REVERSE_DAYS : DEFAULT_DAYS;
     const [dayNumber, monthNumber, yearNumber] = getDateValues(dateValue);
     const [secondDayNumber, secondMonthNumber, secondYearNumber] = getDateValues(dateSecondValue);
     const [innerDayNumber, innerMonthNumber, innerYearNumber] = getDateValues(dateCalendarValue);
+    const [renderDay, renderMonth, renderYear] = dateCalendarValue.split("/");
 
     const handlePrevYear = () => {
+        if (renderDay && renderMonth && renderYear) {
+            dispatch({
+                type: SET_CALENDAR_DATE,
+                payload: { dateValue: `${renderDay}/${renderMonth}/${Number(renderYear) - 1}` },
+            });
+        }
+    };
+
+    /* const handlePrevYear = () => {
         const [day, month, year] = dateCalendarValue.split("/");
 
         if (day && month && year) {
@@ -75,9 +91,18 @@ export function CalendarYearMode({
                 payload: { dateValue: `${day}/${month}/${+year - 1}` },
             });
         }
-    };
+    }; */
 
     const handleNextYear = () => {
+        if (renderDay && renderMonth && renderYear) {
+            dispatch({
+                type: SET_CALENDAR_DATE,
+                payload: { dateValue: `${renderDay}/${renderMonth}/${Number(renderYear) + 1}` },
+            });
+        }
+    };
+
+    /* const handleNextYear = () => {
         const [day, month, year] = dateCalendarValue.split("/");
 
         if (day && month && year) {
@@ -86,9 +111,23 @@ export function CalendarYearMode({
                 payload: { dateValue: `${day}/${month}/${+year + 1}` },
             });
         }
-    };
+    }; */
 
     const handlePrevMonth = () => {
+        if (renderDay && renderMonth && renderYear) {
+            const nexCalendarDate =
+                Number(renderMonth) === 1
+                    ? `${renderDay}/12/${Number(renderYear) - 1}`
+                    : `${renderDay}/${+renderMonth - 1}/${Number(renderYear)}`;
+
+            dispatch({
+                type: SET_CALENDAR_DATE,
+                payload: { dateValue: nexCalendarDate },
+            });
+        }
+    };
+
+    /* const handlePrevMonth = () => {
         const [day, month, year] = dateCalendarValue.split("/");
 
         if (day && month && year) {
@@ -100,9 +139,23 @@ export function CalendarYearMode({
                 payload: { dateValue: nexCalendarDate },
             });
         }
-    };
+    }; */
 
     const handleNextMonth = () => {
+        if (renderDay && renderMonth && renderYear) {
+            const nexCalendarDate =
+                Number(renderMonth) === 12
+                    ? `${renderDay}/01/${Number(renderYear) + 1}`
+                    : `${renderDay}/${Number(renderMonth) + 1}/${Number(renderYear)}`;
+
+            dispatch({
+                type: SET_CALENDAR_DATE,
+                payload: { dateValue: nexCalendarDate },
+            });
+        }
+    };
+
+    /* const handleNextMonth = () => {
         const [day, month, year] = dateCalendarValue.split("/");
 
         if (day && month && year) {
@@ -114,7 +167,7 @@ export function CalendarYearMode({
                 payload: { dateValue: nexCalendarDate },
             });
         }
-    };
+    }; */
 
     const calendarItems = useMemo((): CalendarItemsType[] | null => {
         const [day, month, year] = dateCalendarValue.split("/");
@@ -195,11 +248,11 @@ export function CalendarYearMode({
                     </Button>
                 </CalendarButtonsBlock>
             </CalendarButtonsContainer>
-            <Flex>
+            <DaysTitleContainer>
                 {DAYS.map((day) => (
                     <DayWeekTitle key={day}>{day}</DayWeekTitle>
                 ))}
-            </Flex>
+            </DaysTitleContainer>
             <CalendarDaysContainer>
                 {calendarItems &&
                     calendarItems.map((calendarItem, index) => {
@@ -236,11 +289,24 @@ export function CalendarYearMode({
                             calendarItem.year === yearNumber &&
                             calendarItem.date === dayNumber;
 
+                        const isTodayDay = isToday(calendarItem);
+
+                        const isDayOffDay = isDayOff(calendarItem, weekStartsOnSunday);
+
+                        // console.log(isDayOffDay, "isDayOffDay");
+
+                        const isHolidayDay = isHoliday(calendarItem, holidaysList) && withHolidays;
+
+                        // console.log(isHolidayDay, "isHolidayDay");
+
                         if (isInvalidDayButton) {
                             return (
-                                <DayButton color="#AAAAAA" key={index.toString()} disabled>
-                                    {calendarItem.date}
-                                </DayButton>
+                                <CalendarDayButton
+                                    // type=""
+                                    type={BUTTON_TYPE_INVALID_DAY}
+                                    key={index.toString()}
+                                    text={String(calendarItem.date)}
+                                />
                             );
                         }
 
@@ -251,6 +317,9 @@ export function CalendarYearMode({
                                     type={BUTTON_TYPE_START_RANGE}
                                     onDoubleClick={() => handleOpenTodo(calendarItem)}
                                     text={String(calendarItem.date)}
+                                    isToday={isTodayDay}
+                                    isDayOff={isDayOffDay}
+                                    isHoliday={isHolidayDay}
                                 />
                             );
                         }
@@ -262,6 +331,9 @@ export function CalendarYearMode({
                                     type={BUTTON_TYPE_END_RANGE}
                                     onDoubleClick={() => handleOpenTodo(calendarItem)}
                                     text={String(calendarItem.date)}
+                                    isToday={isTodayDay}
+                                    isDayOff={isDayOffDay}
+                                    isHoliday={isHolidayDay}
                                 />
                             );
                         }
@@ -274,6 +346,9 @@ export function CalendarYearMode({
                                     onDoubleClick={() => handleOpenTodo(calendarItem)}
                                     onClick={() => handleWithinRangeClick(calendarItem)}
                                     text={String(calendarItem.date)}
+                                    isToday={isTodayDay}
+                                    isDayOff={isDayOffDay}
+                                    isHoliday={isHolidayDay}
                                 />
                             );
                         }
@@ -285,6 +360,9 @@ export function CalendarYearMode({
                                     type={BUTTON_TYPE_CURRENT_DAY}
                                     onDoubleClick={() => handleOpenTodo(calendarItem)}
                                     text={String(calendarItem.date)}
+                                    isToday={isTodayDay}
+                                    isDayOff={isDayOffDay}
+                                    isHoliday={isHolidayDay}
                                 />
                             );
                         }
@@ -297,6 +375,9 @@ export function CalendarYearMode({
                                 onClick={() => handleCalendarDateClick(calendarItem)}
                                 onDoubleClick={() => handleOpenTodo(calendarItem)}
                                 text={String(calendarItem.date)}
+                                isToday={isTodayDay}
+                                isDayOff={isDayOffDay}
+                                isHoliday={isHolidayDay}
                             />
                         );
                     })}

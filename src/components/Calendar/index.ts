@@ -1,2 +1,7 @@
 export { Calendar } from "@/components/Calendar/Calendar";
-export { EmptyWeek, CalendarContainer, CalendarTitleContainer } from "@/components/Calendar/styled";
+export {
+    EmptyWeek,
+    CalendarContainer,
+    CalendarTitleContainer,
+    DaysTitleContainer,
+} from "@/components/Calendar/styled";

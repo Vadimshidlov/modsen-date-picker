@@ -1,4 +1,5 @@
 import React, { useReducer, useState } from "react";
+import styled from "styled-components";
 import { DatePickerFormContainer, DatePickerStyled } from "@/components/DatePicker/index";
 import { DateInput } from "@/components/DateInput/index";
 import { Flex } from "@/components/Flex/index";
@@ -8,11 +9,13 @@ import { Text } from "@/components/Text/index";
 import { ClearButton } from "@/components/Button/Button";
 import { TodoModal } from "@/components/TodoModal";
 import { getCurrentDate } from "@/utils/date/index";
-import { DatePickerActionType, DatePickerClearActionType, DatePickerPropsType } from "@/types";
+import { ReactComponent as TodoIcon } from "@/assets/svg/to-do-list.svg";
+import { DatePickerPropsType } from "@/types";
 import {
     CLEAR_FIRST_PICKER_DATE,
     CLEAR_SECOND_CALENDAR_DATE,
     CLEAR_TODO_DATE,
+    DEFAULT_HOLIDAYS,
     SET_CALENDAR_AND_PICKER_DATE,
     SET_CALENDAR_DATE,
     SET_FIRST_CALENDAR_DATE,
@@ -21,11 +24,13 @@ import {
     СLEAR_CALENDAR_AND_PICKER_DATE,
     СLEAR_PICKER_DATES,
 } from "@/constants";
-import {
-    DateRangeSecondActionType,
-    DateRangeFirstActionType,
-    DatePickerActionsType,
-} from "@/types/types";
+import { DatePickerActionsType } from "@/types/types";
+import { TodoTooltip } from "@/components/TodoTooltip/TodoTooltip";
+
+export const TodoIconStyled = styled(TodoIcon)`
+    width: 20px;
+    height: 20px;
+`;
 
 const initialPickerState = {
     datePickerFirstValue: "",
@@ -36,13 +41,7 @@ const initialPickerState = {
     todoItemDate: "",
 };
 
-const reducer = (
-    state = initialPickerState,
-    action: // | DatePickerActionType
-    // | DatePickerClearActionType
-    // DateRangeSecondActionType | DateRangeFirstActionType,
-    DatePickerActionsType,
-) => {
+const reducer = (state = initialPickerState, action: DatePickerActionsType) => {
     switch (action.type) {
         case SET_FIRST_CALENDAR_DATE:
             return {
@@ -68,6 +67,14 @@ const reducer = (
                 calendarValue: action.payload.dateValue,
             };
         case SET_CALENDAR_AND_PICKER_DATE:
+            if (action.payload.dateRangeFirstValue.length < 10) {
+                return {
+                    ...state,
+                    datePickerFirstValue: action.payload.dateValue,
+                    dateRangeFirstValue: action.payload.dateRangeFirstValue,
+                };
+            }
+
             return {
                 ...state,
                 datePickerFirstValue: action.payload.dateValue,
@@ -78,13 +85,10 @@ const reducer = (
                         : action.payload.dateRangeFirstValue,
             };
         case СLEAR_CALENDAR_AND_PICKER_DATE:
-            console.log("СLEAR_CALENDAR_AND_PICKER_DATE case");
-
             return {
                 ...state,
                 datePickerFirstValue: "",
                 dateRangeFirstValue: "",
-                // calendarValue: "",
             };
         case CLEAR_FIRST_PICKER_DATE:
             return {
@@ -121,11 +125,13 @@ export function DatePicker({
     weekMode,
     minDate,
     maxDate,
+    withHolidays,
+    holidaysList = DEFAULT_HOLIDAYS,
 }: DatePickerPropsType) {
     const [isShowCalendar, setIsShowCalendar] = useState(false);
     const [pickerState, dispatch] = useReducer(reducer, initialPickerState);
 
-    console.log(pickerState);
+    console.log(pickerState, `pickerState`);
 
     const handleClearPicker = () => {
         if (withRange) {
@@ -170,6 +176,7 @@ export function DatePicker({
             </DatePickerFormContainer>
             {isShowCalendar && (
                 <Flex direction="column">
+                    <TodoTooltip />
                     <Calendar
                         weekStartsOnSunday={weekStartsOnSunday}
                         dateValue={pickerState.dateRangeFirstValue}
@@ -180,6 +187,8 @@ export function DatePicker({
                         minDate={minDate}
                         maxDate={maxDate}
                         withRange={withRange}
+                        withHolidays={withHolidays}
+                        holidaysList={holidaysList}
                     />
                     <ClearButton onClick={handleClearPicker}>Clear</ClearButton>
                 </Flex>

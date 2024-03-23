@@ -1,15 +1,15 @@
 import React, { useMemo, useState } from "react";
 import {
-    DEFAULT_DAYS,
-    REVERSE_DAYS,
     BUTTON_TYPE_CURRENT_DAY,
     BUTTON_TYPE_CURRENT_MONTH_DAY,
     BUTTON_TYPE_END_RANGE,
     BUTTON_TYPE_INVALID_DAY,
     BUTTON_TYPE_START_RANGE,
     BUTTON_TYPE_WITHIN_RANGE,
-    SET_CALENDAR_DATE,
+    DEFAULT_DAYS,
+    REVERSE_DAYS,
     SET_CALENDAR_AND_PICKER_DATE,
+    SET_CALENDAR_DATE,
 } from "@/constants";
 import {
     getCurrentMonthDays,
@@ -29,9 +29,11 @@ import { ReactComponent as NextYearButton } from "@/assets/svg/next-button.svg";
 import {
     getInitialWeekNumber,
     getPreviousMonthWeeksCount,
-    isDatesExist,
+    isDayOff,
     isFirstDayInRange,
+    isHoliday,
     isLastDayInRange,
+    isToday,
     validateMaxDate,
     validateMinDate,
 } from "@/utils/date/calendarDate";
@@ -57,16 +59,33 @@ export function CalendarWeekMode({
     maxDate,
     withRange,
     handleOpenTodo,
+    withHolidays,
+    holidaysList,
 }: CalendarWeekModePropsType) {
     const DAYS = weekStartsOnSunday ? REVERSE_DAYS : DEFAULT_DAYS;
     const [dayNumber, monthNumber, yearNumber] = getDateValues(dateValue);
     const [secondDayNumber, secondMonthNumber, secondYearNumber] = getDateValues(dateSecondValue);
     const [innerDayNumber, innerMonthNumber, innerYearNumber] = getDateValues(dateCalendarValue);
+    const [renderDay, renderMonth, renderYear] = dateCalendarValue.split("/");
     const [weekNumber, setWeekNumber] = useState(() =>
         getInitialWeekNumber(dateCalendarValue, weekStartsOnSunday),
     );
 
     const calendarItems = useMemo((): CalendarItemsType[] | null => {
+        if (renderDay && renderMonth && renderYear) {
+            const selectedMonthDaysCount = getDaysInAMonth(+renderYear, +renderMonth - 1);
+
+            return [
+                ...getPreviousMonthDays(+renderYear, +renderMonth - 1, weekStartsOnSunday),
+                ...getCurrentMonthDays(+renderYear, +renderMonth - 1, selectedMonthDaysCount),
+                ...getNextMonthDays(+renderYear, +renderMonth - 1, weekStartsOnSunday),
+            ];
+        }
+
+        return null;
+    }, [renderDay, renderMonth, renderYear, weekStartsOnSunday]);
+
+    /* const calendarItems = useMemo((): CalendarItemsType[] | null => {
         const [day, month, year] = dateCalendarValue.split("/");
 
         if (day && month && year) {
@@ -80,9 +99,38 @@ export function CalendarWeekMode({
         }
 
         return null;
-    }, [dateCalendarValue, weekStartsOnSunday]);
+    }, [dateCalendarValue, weekStartsOnSunday]); */
 
     const handlePrevWeek = () => {
+        if (weekNumber >= 1) {
+            setWeekNumber((prevWeek) => prevWeek - 1);
+
+            return;
+        }
+
+        if (renderDay && renderMonth && renderYear) {
+            const nexCalendarDate =
+                Number(renderMonth) === 1
+                    ? `${renderDay}/12/${Number(renderYear) - 1}`
+                    : `${renderDay}/${Number(renderMonth) - 1}/${Number(renderYear)}`;
+
+            const previousMonthWeeksCount = getPreviousMonthWeeksCount(
+                nexCalendarDate,
+                weekStartsOnSunday,
+            );
+
+            dispatch({
+                type: SET_CALENDAR_DATE,
+                payload: { dateValue: nexCalendarDate },
+            });
+
+            if (previousMonthWeeksCount !== null) {
+                setWeekNumber(previousMonthWeeksCount);
+            }
+        }
+    };
+
+    /* const handlePrevWeek = () => {
         if (weekNumber >= 1) {
             setWeekNumber((prevWeek) => prevWeek - 1);
 
@@ -109,9 +157,31 @@ export function CalendarWeekMode({
                 setWeekNumber(previousMonthWeeksCount);
             }
         }
-    };
+    }; */
 
     const handleNextWeek = () => {
+        if (calendarItems && calendarItems.length / 7 > weekNumber + 1) {
+            setWeekNumber((prevWeek) => prevWeek + 1);
+
+            return;
+        }
+
+        if (renderDay && renderMonth && renderYear) {
+            const nexCalendarDate =
+                Number(renderMonth) === 12
+                    ? `${renderDay}/01/${Number(renderYear) + 1}`
+                    : `${renderDay}/${Number(renderMonth) + 1}/${Number(renderYear)}`;
+
+            dispatch({
+                type: SET_CALENDAR_DATE,
+                payload: { dateValue: nexCalendarDate },
+            });
+
+            setWeekNumber(0);
+        }
+    };
+
+    /* const handleNextWeek = () => {
         if (calendarItems && calendarItems.length / 7 > weekNumber + 1) {
             setWeekNumber((prevWeek) => prevWeek + 1);
 
@@ -131,7 +201,7 @@ export function CalendarWeekMode({
 
             setWeekNumber(0);
         }
-    };
+    }; */
 
     const handleWithinRangeClick = (calendarItem: CalendarItemsType) => {
         if (withRange) {
@@ -248,16 +318,27 @@ export function CalendarWeekMode({
                                 secondYearNumber,
                             );
 
-                            const isCurrentDayButton =
+                            const isSelectedDayButton =
                                 calendarItem.month === monthNumber &&
                                 calendarItem.year === yearNumber &&
                                 calendarItem.date === dayNumber;
 
+                            const isTodayDay = isToday(calendarItem);
+
+                            const isDayOffDay = isDayOff(calendarItem, weekStartsOnSunday);
+
+                            // console.log(isDayOffDay, "isDayOffDay");
+
+                            const isHolidayDay =
+                                isHoliday(calendarItem, holidaysList) && withHolidays;
+
+                            // console.log(isHolidayDay, "isHolidayDay");
+
                             if (isInvalidDate) {
                                 return (
                                     <CalendarDayButton
-                                        key={index.toString()}
                                         type={BUTTON_TYPE_INVALID_DAY}
+                                        key={index.toString()}
                                         text={String(calendarItem.date)}
                                     />
                                 );
@@ -270,6 +351,9 @@ export function CalendarWeekMode({
                                         type={BUTTON_TYPE_START_RANGE}
                                         onDoubleClick={() => handleOpenTodo(calendarItem)}
                                         text={String(calendarItem.date)}
+                                        isToday={isTodayDay}
+                                        isDayOff={isDayOffDay}
+                                        isHoliday={isHolidayDay}
                                     />
                                 );
                             }
@@ -282,6 +366,9 @@ export function CalendarWeekMode({
                                         onDoubleClick={() => handleOpenTodo(calendarItem)}
                                         onClick={() => handleWithinRangeClick(calendarItem)}
                                         text={String(calendarItem.date)}
+                                        isToday={isTodayDay}
+                                        isDayOff={isDayOffDay}
+                                        isHoliday={isHolidayDay}
                                     />
                                 );
                             }
@@ -293,17 +380,23 @@ export function CalendarWeekMode({
                                         type={BUTTON_TYPE_END_RANGE}
                                         onDoubleClick={() => handleOpenTodo(calendarItem)}
                                         text={String(calendarItem.date)}
+                                        isToday={isTodayDay}
+                                        isDayOff={isDayOffDay}
+                                        isHoliday={isHolidayDay}
                                     />
                                 );
                             }
 
-                            if (isCurrentDayButton) {
+                            if (isSelectedDayButton) {
                                 return (
                                     <CalendarDayButton
                                         key={index.toString()}
                                         type={BUTTON_TYPE_CURRENT_DAY}
                                         onDoubleClick={() => handleOpenTodo(calendarItem)}
                                         text={String(calendarItem.date)}
+                                        isToday={isTodayDay}
+                                        isDayOff={isDayOffDay}
+                                        isHoliday={isHolidayDay}
                                     />
                                 );
                             }
@@ -316,6 +409,9 @@ export function CalendarWeekMode({
                                     onClick={() => handleCalendarDateClick(calendarItem)}
                                     onDoubleClick={() => handleOpenTodo(calendarItem)}
                                     text={String(calendarItem.date)}
+                                    isToday={isTodayDay}
+                                    isDayOff={isDayOffDay}
+                                    isHoliday={isHolidayDay}
                                 />
                             );
                         })}

@@ -13,7 +13,6 @@ export {
     validateMinDate,
     validateInputMinMaxDate,
     getInitialWeekNumber,
-    isNumbersExist,
     getPreviousMonthWeeksCount,
     getCurrentDate,
     isFirstDayInRange,

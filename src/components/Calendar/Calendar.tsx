@@ -14,6 +14,8 @@ export function Calendar({
     minDate,
     maxDate,
     withRange,
+    withHolidays,
+    holidaysList,
 }: CalendarPropsType) {
     const handleOpenTodo = (calendarItem: CalendarItemsType) => {
         dispatch({
@@ -35,6 +37,8 @@ export function Calendar({
             minDate={minDate}
             maxDate={maxDate}
             withRange={withRange}
+            withHolidays={withHolidays}
+            holidaysList={holidaysList}
         />
     ) : (
         <CalendarYearMode
@@ -47,6 +51,8 @@ export function Calendar({
             minDate={minDate}
             maxDate={maxDate}
             withRange={withRange}
+            withHolidays={withHolidays}
+            holidaysList={holidaysList}
         />
     );
 }

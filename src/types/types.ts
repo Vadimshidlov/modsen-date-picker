@@ -1,5 +1,6 @@
 import React, { ChangeEvent, ReactNode } from "react";
 import { SET_FIRST_CALENDAR_DATE } from "@/constants";
+import { HolidaysListType } from "@/constants/calendar";
 
 export type ButtonPropsType = {
     direction?: "row" | "column";
@@ -34,12 +35,17 @@ export type CalendarPropsType = {
     minDate: Date;
     maxDate: Date;
     withRange: boolean;
+    withHolidays: boolean;
+    holidaysList: HolidaysListType[];
 };
 
 export type CalendarDayButtonPropsType = {
     type: string;
     text: string;
     isInnerDay?: boolean;
+    isToday?: boolean;
+    isDayOff?: boolean;
+    isHoliday?: boolean;
     onClick?: () => void;
     onDoubleClick?: () => void;
 };
@@ -53,6 +59,8 @@ export type CalendarWeekModePropsType = {
     minDate: Date;
     maxDate: Date;
     withRange: boolean;
+    withHolidays: boolean;
+    holidaysList: HolidaysListType[];
     handleOpenTodo: (calendarItem: CalendarItemsType) => void;
 };
 
@@ -65,6 +73,8 @@ export type CalendarYearModePropsType = {
     minDate: Date;
     maxDate: Date;
     withRange: boolean;
+    withHolidays: boolean;
+    holidaysList: HolidaysListType[];
     handleOpenTodo: (calendarItem: CalendarItemsType) => void;
 };
 
@@ -157,27 +167,16 @@ export type DatePickerStateType = {
 };
 
 export type DayButtonPropsType = {
-    direction?: "row" | "column";
-    align?: "flex-start" | "flex-end" | "center" | "stretch";
-    justify?:
-        | "flex-start"
-        | "flex-end"
-        | "center"
-        | "space-between"
-        | "space-around"
-        | "space-evenly";
-    margin?: string;
     color?: string;
-    border?: string;
-    borderRadius?: string;
-    padding?: string;
-    width?: string;
-    maxWidth?: string;
-    minWidth?: string;
-    height?: string;
-    rowGap?: string;
-    columnGap?: string;
-    children: ReactNode;
+    $isToday?: boolean;
+    $isDayOff?: boolean;
+    $isInnerDay?: boolean;
+    $isStartRange?: boolean;
+    $isEndRange?: boolean;
+    $isWithinRange?: boolean;
+    $isSelected?: boolean;
+    $isDisabled?: boolean;
+    $isHoliday?: boolean;
 };
 
 export type TodoFormPropsType = {
@@ -219,7 +218,9 @@ export type TodoStorageType = {
 export type DatePickerPropsType = {
     weekStartsOnSunday: boolean;
     withRange: boolean;
+    withHolidays: boolean;
     weekMode: boolean;
     minDate: Date;
     maxDate: Date;
+    holidaysList: HolidaysListType[];
 };

@@ -48,6 +48,7 @@ export const TextTitle = styled(Text)`
 `;
 
 export const DayWeekTitle = styled(Text)`
+    width: 33px;
     font-weight: 900;
     padding: 6px 8px;
     line-height: 19px;

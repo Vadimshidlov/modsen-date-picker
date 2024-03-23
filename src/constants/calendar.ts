@@ -42,3 +42,191 @@ export const CLEAR_FIRST_PICKER_DATE = "CLEAR_FIRST_PICKER_DATE";
 export const СLEAR_PICKER_DATES = "СLEAR_PICKER_DATES";
 export const SET_TODO_DATE = "SET_TODO_DATE";
 export const CLEAR_TODO_DATE = "CLEAR_TODO_DATE";
+
+export type HolidaysListType = {
+    title: string;
+    date: Date;
+};
+
+export const DEFAULT_HOLIDAYS: HolidaysListType[] = [
+    // 2023
+    {
+        title: "New Year's Day",
+        date: new Date(2023, 0, 1),
+    },
+    {
+        title: "Orthodox Christmas Eve",
+        date: new Date(2023, 0, 6),
+    },
+    {
+        title: "Orthodox Christmas Day",
+        date: new Date(2023, 0, 7),
+    },
+    {
+        title: "Defender of the Fatherland Day",
+        date: new Date(2023, 1, 23),
+    },
+    {
+        title: "International Women's Day",
+        date: new Date(2023, 2, 8),
+    },
+    {
+        title: "International Labor Day",
+        date: new Date(2023, 4, 1),
+    },
+    {
+        title: "Victory Day",
+        date: new Date(2023, 4, 9),
+    },
+    {
+        title: "Commemoration Day",
+        date: new Date(2023, 4, 14),
+    },
+    {
+        title: "Independence Day",
+        date: new Date(2023, 6, 3),
+    },
+    {
+        title: "October Revolution Day",
+        date: new Date(2023, 10, 7),
+    },
+    {
+        title: "Christmas Day",
+        date: new Date(2023, 11, 25),
+    },
+    // 2024
+    {
+        title: "New Year's Day",
+        date: new Date(2024, 0, 1),
+    },
+    {
+        title: "Orthodox Christmas Eve",
+        date: new Date(2024, 0, 6),
+    },
+    {
+        title: "Orthodox Christmas Day",
+        date: new Date(2024, 0, 7),
+    },
+    {
+        title: "Defender of the Fatherland Day",
+        date: new Date(2024, 1, 23),
+    },
+    {
+        title: "International Women's Day",
+        date: new Date(2024, 2, 8),
+    },
+    {
+        title: "International Labor Day",
+        date: new Date(2024, 4, 1),
+    },
+    {
+        title: "Victory Day",
+        date: new Date(2024, 4, 9),
+    },
+    {
+        title: "Commemoration Day",
+        date: new Date(2024, 4, 14),
+    },
+    {
+        title: "Independence Day",
+        date: new Date(2024, 6, 3),
+    },
+    {
+        title: "October Revolution Day",
+        date: new Date(2024, 10, 7),
+    },
+    {
+        title: "Christmas Day",
+        date: new Date(2024, 11, 25),
+    },
+    // 2025
+    {
+        title: "New Year's Day",
+        date: new Date(2025, 0, 1),
+    },
+    {
+        title: "Orthodox Christmas Eve",
+        date: new Date(2025, 0, 6),
+    },
+    {
+        title: "Orthodox Christmas Day",
+        date: new Date(2025, 0, 7),
+    },
+    {
+        title: "Defender of the Fatherland Day",
+        date: new Date(2025, 1, 23),
+    },
+    {
+        title: "International Women's Day",
+        date: new Date(2025, 2, 8),
+    },
+    {
+        title: "International Labor Day",
+        date: new Date(2025, 4, 1),
+    },
+    {
+        title: "Victory Day",
+        date: new Date(2025, 4, 9),
+    },
+    {
+        title: "Commemoration Day",
+        date: new Date(2025, 4, 14),
+    },
+    {
+        title: "Independence Day",
+        date: new Date(2025, 6, 3),
+    },
+    {
+        title: "October Revolution Day",
+        date: new Date(2025, 10, 7),
+    },
+    {
+        title: "Christmas Day",
+        date: new Date(2025, 11, 25),
+    },
+    // 2026
+    {
+        title: "New Year's Day",
+        date: new Date(2026, 0, 1),
+    },
+    {
+        title: "Orthodox Christmas Eve",
+        date: new Date(2026, 0, 6),
+    },
+    {
+        title: "Orthodox Christmas Day",
+        date: new Date(2026, 0, 7),
+    },
+    {
+        title: "Defender of the Fatherland Day",
+        date: new Date(2026, 1, 23),
+    },
+    {
+        title: "International Women's Day",
+        date: new Date(2026, 2, 8),
+    },
+    {
+        title: "International Labor Day",
+        date: new Date(2026, 4, 1),
+    },
+    {
+        title: "Victory Day",
+        date: new Date(2026, 4, 9),
+    },
+    {
+        title: "Commemoration Day",
+        date: new Date(2026, 4, 14),
+    },
+    {
+        title: "Independence Day",
+        date: new Date(2026, 6, 3),
+    },
+    {
+        title: "October Revolution Day",
+        date: new Date(2026, 10, 7),
+    },
+    {
+        title: "Christmas Day",
+        date: new Date(2026, 11, 25),
+    },
+];

@@ -1,5 +1,6 @@
 import { MONTH_NAMES } from "@/constants";
 import { CalendarItemsType } from "@/types";
+import { HolidaysListType } from "@/constants/calendar";
 
 export const getDaysInAMonth = (year: number, month: number) => {
     const nextMonthDate = new Date(year, month + 1, 1);
@@ -219,21 +220,6 @@ export const validateRangeInput = (
     return result;
 };
 
-export const isNumbersExist = (
-    dayNumber: number | undefined,
-    monthNumber: number | undefined,
-    yearNumber: number | undefined,
-    secondDayNumber: number | undefined,
-    secondMonthNumber: number | undefined,
-    secondYearNumber: number | undefined,
-) =>
-    Number.isInteger(dayNumber) &&
-    Number.isInteger(monthNumber) &&
-    Number.isInteger(yearNumber) &&
-    Number.isInteger(secondDayNumber) &&
-    Number.isInteger(secondMonthNumber) &&
-    Number.isInteger(secondYearNumber);
-
 export const isDateInRange = (
     calendarItem: CalendarItemsType,
     yearNumber: number | undefined,
@@ -247,21 +233,6 @@ export const isDateInRange = (
         new Date(yearNumber!, monthNumber!, dayNumber!) &&
     new Date(calendarItem.year, calendarItem.month, calendarItem.date) <
         new Date(secondYearNumber!, secondMonthNumber!, secondDayNumber!);
-
-export const isDatesExist = (
-    yearNumber: number | undefined,
-    monthNumber: number | undefined,
-    dayNumber: number | undefined,
-    secondYearNumber: number | undefined,
-    secondMonthNumber: number | undefined,
-    secondDayNumber: number | undefined,
-) =>
-    typeof yearNumber === "number" &&
-    typeof monthNumber === "number" &&
-    typeof dayNumber === "number" &&
-    typeof secondYearNumber === "number" &&
-    typeof secondMonthNumber === "number" &&
-    typeof secondDayNumber === "number";
 
 export const isValidRange = (
     yearNumber: number | undefined,
@@ -330,4 +301,43 @@ export const handleInputMask = (value: string) => {
     }
 
     return inputValue;
+};
+
+export const isToday = (calendarItem: CalendarItemsType) => {
+    const currentDate = new Date();
+    const currentDay = currentDate.getDate();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+
+    return (
+        currentDay === calendarItem.date &&
+        currentMonth === calendarItem.month &&
+        currentYear === calendarItem.year
+    );
+};
+
+export const isDayOff = (calendarItem: CalendarItemsType, weekStartsOnSunday: boolean) => {
+    const currentDate = new Date(calendarItem.year, calendarItem.month, calendarItem.date);
+    const currentDayNumber = currentDate.getDay();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+
+    if (weekStartsOnSunday) {
+        return currentDayNumber === 5 || currentDayNumber === 6;
+    }
+
+    return currentDayNumber === 6 || currentDayNumber === 0;
+};
+
+export const isHoliday = (calendarItem: CalendarItemsType, holidaysList: HolidaysListType[]) => {
+    const currentDate = new Date(calendarItem.year, calendarItem.month, calendarItem.date);
+    // const currentDayNumber = currentDate.getDay();
+    // const currentMonth = currentDate.getMonth();
+    // const currentYear = currentDate.getFullYear();
+
+    const filteredHolidaysList = holidaysList.filter(
+        (holiday) => holiday.date.getTime() === currentDate.getTime(),
+    );
+
+    return filteredHolidaysList.length !== 0;
 };

@@ -26,6 +26,16 @@ module.exports = {
         project: "./tsconfig.json",
     },
     rules: {
+        "sort-imports": [
+            "error",
+            {
+                ignoreCase: false,
+                ignoreDeclarationSort: true,
+                ignoreMemberSort: false,
+                memberSyntaxSortOrder: ["none", "all", "multiple", "single"],
+                allowSeparatedGroups: true,
+            },
+        ],
         "import/no-extraneous-dependencies": ["error", { devDependencies: true }],
         "no-restricted-imports": [
             "error",
@@ -62,5 +72,6 @@ module.exports = {
         "react/require-default-props": "off",
         "react/no-array-index-key": "off",
         "@typescript-eslint/no-unused-vars": "off",
+        "react/function-component-definition": "off",
     },
 };

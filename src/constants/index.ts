@@ -18,4 +18,5 @@ export {
     SET_CALENDAR_DATE,
     СLEAR_PICKER_DATES,
     СLEAR_CALENDAR_AND_PICKER_DATE,
+    DEFAULT_HOLIDAYS,
 } from "@/constants/calendar";

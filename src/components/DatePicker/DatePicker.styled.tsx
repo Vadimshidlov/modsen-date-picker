@@ -24,3 +24,11 @@ export const DatePickerStyled = styled.div`
 export const DatePickerFormContainer = styled(Flex)`
     margin: 20px 0px 0px 0px;
 `;
+
+export const TodoToltipContainer = styled(Flex)`
+    margin: 10px 0px 10px 0px;
+    flex-direction: row;
+    column-gap: 10px;
+    margin: 10px 0px 10px 0px;
+    justify-content: center;
+`;
