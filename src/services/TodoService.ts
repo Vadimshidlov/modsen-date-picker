@@ -1,13 +1,4 @@
-export type TodoDataType = {
-    title: string;
-    completed: boolean;
-    id: string;
-};
-
-export type TodoStorageType = {
-    date: string;
-    todos: TodoDataType[];
-};
+import { TodoDataType, TodoStorageType } from "@/types";
 
 class TodoService {
     getTodos(todoItemDate: string): TodoStorageType[] {

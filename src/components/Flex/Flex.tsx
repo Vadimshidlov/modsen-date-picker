@@ -40,6 +40,6 @@ export const Flex = styled.div<FlexProps>`
     flex-wrap: ${(props) => props.flexWrap || ""};
 `;
 
-/* export function Flex(props: FlexProps) {
-    return <StyledFlex {...props} />;
-} */
+export const ValidationErrorIconContainer = styled(Flex)`
+    min-width: 15px;
+`;

@@ -13,6 +13,9 @@ export {
     validateMinDate,
     validateInputMinMaxDate,
     getInitialWeekNumber,
-    isNumbersExist,
     getPreviousMonthWeeksCount,
+    getCurrentDate,
+    isFirstDayInRange,
+    isLastDayInRange,
+    getCalendarItems,
 } from "@/utils/date/calendarDate";

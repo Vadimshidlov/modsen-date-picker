@@ -41,7 +41,6 @@ export const ClearButton = styled.button`
     transition: all 0.5s;
 
     &:hover {
-        //border: 2px solid #e1e1e1;
         background-color: #e1e1e1;
     }
 `;

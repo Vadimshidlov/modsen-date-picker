@@ -1,1 +1,1 @@
-export { DayButton, DayWeekButton, CurrentDayWeekButton } from "@/components/DayButton/DayButton";
+export { DayButton, DayWeekButton } from "@/components/DayButton/DayButton";

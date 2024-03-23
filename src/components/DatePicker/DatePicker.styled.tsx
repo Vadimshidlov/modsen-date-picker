@@ -1,4 +1,10 @@
 import styled from "styled-components";
+import { ReactComponent as TodoIcon } from "@/assets/svg/to-do-list.svg";
+
+export const Flex = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
 
 export const DatePickerStyled = styled.div`
     position: relative;
@@ -14,4 +20,21 @@ export const DatePickerStyled = styled.div`
         font-weight: normal;
         font-style: normal;
     }
+`;
+
+export const DatePickerFormContainer = styled(Flex)`
+    margin: 20px 0px 0px 0px;
+`;
+
+export const TodoToltipContainer = styled(Flex)`
+    margin: 10px 0px 10px 0px;
+    flex-direction: row;
+    column-gap: 10px;
+    margin: 10px 0px 10px 0px;
+    justify-content: center;
+`;
+
+export const TodoIconStyled = styled(TodoIcon)`
+    width: 20px;
+    height: 20px;
 `;

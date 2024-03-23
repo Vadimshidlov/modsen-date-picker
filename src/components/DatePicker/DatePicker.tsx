@@ -1,5 +1,6 @@
-import React, { ChangeEvent, useReducer, useState } from "react";
-import { DatePickerStyled } from "@/components/DatePicker/DatePicker.styled";
+import React, { useReducer, useState } from "react";
+import styled from "styled-components";
+import { DatePickerFormContainer, DatePickerStyled } from "@/components/DatePicker/index";
 import { DateInput } from "@/components/DateInput/index";
 import { Flex } from "@/components/Flex/index";
 import { GlobalStyles } from "@/components/GlobalStyle/index";
@@ -7,129 +8,102 @@ import { Calendar } from "@/components/Calendar";
 import { Text } from "@/components/Text/index";
 import { ClearButton } from "@/components/Button/Button";
 import { TodoModal } from "@/components/TodoModal";
-
-export type CalendarItemsType = {
-    year: number;
-    month: number;
-    date: number;
-};
-
-export type DatePickerStateType = {
-    datePickerFirstValue: string;
-    datePickerSecondValue?: string;
-    calendarValue: string;
-};
-
-export const getCurrentDate = (): string => {
-    const currentDate = new Date();
-    const day =
-        currentDate.getDate() < 10 ? `0${currentDate.getDate()}` : `${currentDate.getDate()}`;
-    const month =
-        currentDate.getMonth() + 1 < 10
-            ? `0${currentDate.getMonth() + 1}`
-            : `${currentDate.getMonth() + 1}`;
-    const year = currentDate.getFullYear();
-
-    return `${day}/${month}/${year}`;
-};
+import { getCurrentDate } from "@/utils/date/index";
+import { DatePickerPropsType } from "@/types";
+import {
+    CLEAR_FIRST_PICKER_DATE,
+    CLEAR_SECOND_CALENDAR_DATE,
+    CLEAR_TODO_DATE,
+    DEFAULT_HOLIDAYS,
+    SET_CALENDAR_AND_PICKER_DATE,
+    SET_CALENDAR_DATE,
+    SET_FIRST_CALENDAR_DATE,
+    SET_SECOND_CALENDAR_DATE,
+    SET_TODO_DATE,
+    СLEAR_CALENDAR_AND_PICKER_DATE,
+    СLEAR_PICKER_DATES,
+} from "@/constants";
+import { DatePickerActionsType } from "@/types/types";
+import { TodoTooltip } from "@/components/TodoTooltip/TodoTooltip";
 
 const initialPickerState = {
     datePickerFirstValue: "",
     datePickerSecondValue: "",
+    dateRangeFirstValue: "",
+    dateRangeSecondValue: "",
     calendarValue: getCurrentDate(),
     todoItemDate: "",
 };
 
-const getInitialState = (): DatePickerStateType => ({
-    datePickerFirstValue: "",
-    datePickerSecondValue: "",
-    calendarValue: "",
-});
-
-export type DatePickerActionType = {
-    type:
-        | "SET_FIRST_CALENDAR_DATE"
-        | "SET_SECOND_CALENDAR_DATE"
-        | "SET_CALENDAR_AND_PICKER_DATE"
-        | "CLEAR_SECOND_CALENDAR_DATE"
-        | "СLEAR_CALENDAR_AND_PICKER_DATE"
-        | "СLEAR_PICKER_DATES"
-        | "SET_TODO_DATE"
-        | "SET_CALENDAR_DATE";
-    payload: {
-        dateValue: string;
-    };
-};
-
-export type DatePickerClearActionType = {
-    type: "СLEAR_PICKER_DATES" | "CLEAR_FIRST_PICKER_DATE" | "CLEAR_TODO_DATE";
-};
-
-const reducer = (
-    state = initialPickerState,
-    action: DatePickerActionType | DatePickerClearActionType,
-) => {
+const reducer = (state = initialPickerState, action: DatePickerActionsType) => {
     switch (action.type) {
-        case "SET_FIRST_CALENDAR_DATE":
-            return { ...state, datePickerFirstValue: action.payload.dateValue };
-        case "SET_SECOND_CALENDAR_DATE":
+        case SET_FIRST_CALENDAR_DATE:
+            return {
+                ...state,
+                datePickerFirstValue: action.payload.dateValue,
+                dateRangeFirstValue: action.payload.dateRangeFirstValue,
+            };
+        case SET_SECOND_CALENDAR_DATE:
             return {
                 ...state,
                 datePickerSecondValue: action.payload.dateValue,
+                dateRangeSecondValue: action.payload.dateRangeSecondValue,
             };
-        case "CLEAR_SECOND_CALENDAR_DATE":
+        case CLEAR_SECOND_CALENDAR_DATE:
             return {
                 ...state,
                 datePickerSecondValue: "",
+                dateRangeSecondValue: "",
             };
-        case "SET_CALENDAR_DATE":
+        case SET_CALENDAR_DATE:
             return {
                 ...state,
                 calendarValue: action.payload.dateValue,
             };
-        case "SET_CALENDAR_AND_PICKER_DATE":
-            if (action.payload.dateValue.length < 10) {
+        case SET_CALENDAR_AND_PICKER_DATE:
+            if (action.payload.dateRangeFirstValue.length < 10) {
                 return {
                     ...state,
                     datePickerFirstValue: action.payload.dateValue,
+                    dateRangeFirstValue: action.payload.dateRangeFirstValue,
                 };
             }
 
             return {
                 ...state,
                 datePickerFirstValue: action.payload.dateValue,
+                dateRangeFirstValue: action.payload.dateRangeFirstValue,
                 calendarValue:
-                    action.payload.dateValue === "" ? getCurrentDate() : action.payload.dateValue,
+                    action.payload.dateRangeFirstValue === ""
+                        ? getCurrentDate()
+                        : action.payload.dateRangeFirstValue,
             };
-        case "СLEAR_CALENDAR_AND_PICKER_DATE":
+        case СLEAR_CALENDAR_AND_PICKER_DATE:
             return {
                 ...state,
                 datePickerFirstValue: "",
-                // calendarValue: state.datePickerFirstValue,
+                dateRangeFirstValue: "",
             };
-        case "CLEAR_FIRST_PICKER_DATE":
+        case CLEAR_FIRST_PICKER_DATE:
             return {
                 ...state,
                 datePickerFirstValue: "",
+                dateRangeFirstValue: "",
             };
-        case "СLEAR_PICKER_DATES":
+        case СLEAR_PICKER_DATES:
             return {
                 ...state,
                 datePickerFirstValue: "",
                 datePickerSecondValue: "",
+                dateRangeFirstValue: "",
+                dateRangeSecondValue: "",
             };
-        case "SET_TODO_DATE":
+        case SET_TODO_DATE:
             return {
                 ...state,
                 todoItemDate: action.payload.dateValue,
-                // calendarValue: state.datePickerFirstValue,
             };
-        case "CLEAR_TODO_DATE":
-            console.log({
-                ...state,
-                todoItemDate: "",
-            });
-
+        case CLEAR_TODO_DATE:
             return {
                 ...state,
                 todoItemDate: "",
@@ -139,55 +113,50 @@ const reducer = (
     }
 };
 
-export type DatePickerPropsType = {
-    weekStartsOnSunday: boolean;
-    withRange: boolean;
-    weekMode: boolean;
-    minDate: Date;
-    maxDate: Date;
-};
-
 export function DatePicker({
     weekStartsOnSunday,
     withRange,
     weekMode,
     minDate,
     maxDate,
+    withHolidays,
+    holidaysList = DEFAULT_HOLIDAYS,
 }: DatePickerPropsType) {
     const [isShowCalendar, setIsShowCalendar] = useState(false);
     const [pickerState, dispatch] = useReducer(reducer, initialPickerState);
-    const [isOpenModal, setIsOpenModal] = useState(false);
 
     const handleClearPicker = () => {
         if (withRange) {
-            dispatch({ type: "СLEAR_PICKER_DATES" });
+            dispatch({ type: СLEAR_PICKER_DATES });
         } else {
-            dispatch({ type: "CLEAR_FIRST_PICKER_DATE" });
+            dispatch({ type: CLEAR_FIRST_PICKER_DATE });
         }
     };
 
     return (
         <DatePickerStyled>
             <GlobalStyles />
-            <Flex margin="20px 0px 0px 0px" direction="column">
+            <DatePickerFormContainer>
                 {withRange && <Text>From:</Text>}
                 <DateInput
                     dispatch={dispatch}
                     value={pickerState.datePickerFirstValue}
+                    dateRangeFirstValue={pickerState.dateRangeFirstValue}
+                    dateRangeSecondValue={pickerState.dateRangeSecondValue}
                     setIsShowCalendar={setIsShowCalendar}
                     minDate={minDate}
                     maxDate={maxDate}
                     isWithRange={withRange}
                     isFirstDate
                 />
-
                 {withRange && (
                     <>
                         <Text>To:</Text>
                         <DateInput
                             dispatch={dispatch}
-                            // dispatch={dispatch}
                             value={pickerState.datePickerSecondValue}
+                            dateRangeFirstValue={pickerState.dateRangeFirstValue}
+                            dateRangeSecondValue={pickerState.dateRangeSecondValue}
                             setIsShowCalendar={setIsShowCalendar}
                             minDate={minDate}
                             maxDate={maxDate}
@@ -196,19 +165,22 @@ export function DatePicker({
                         />
                     </>
                 )}
-            </Flex>
+            </DatePickerFormContainer>
             {isShowCalendar && (
                 <Flex direction="column">
+                    <TodoTooltip />
                     <Calendar
                         weekStartsOnSunday={weekStartsOnSunday}
-                        dateValue={pickerState.datePickerFirstValue}
-                        dateSecondValue={pickerState.datePickerSecondValue}
+                        dateValue={pickerState.dateRangeFirstValue}
+                        dateSecondValue={pickerState.dateRangeSecondValue}
                         dateCalendarValue={pickerState.calendarValue}
                         dispatch={dispatch}
                         weekMode={weekMode}
                         minDate={minDate}
                         maxDate={maxDate}
                         withRange={withRange}
+                        withHolidays={withHolidays}
+                        holidaysList={holidaysList}
                     />
                     <ClearButton onClick={handleClearPicker}>Clear</ClearButton>
                 </Flex>
