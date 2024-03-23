@@ -40,17 +40,17 @@ export const DayButton = styled.button<DayButtonPropsType>`
     }) =>
         $isStartRange || $isEndRange || $isSelected
             ? "white"
-            : // : $isToday
-              //   ? "orange"
-              ($isDayOff || $isHoliday) && !$isInnerDay
+            : ($isDayOff || $isHoliday) && !$isInnerDay
               ? "red"
               : $isWithinRange
                 ? "#2F80ED"
                 : !$isInnerDay && !$isDisabled
                   ? "black"
                   : "#808080c2"};
-    border: ${({ $isToday, $isWithinRange }) =>
-        $isToday && !$isWithinRange ? "1px solid orange" : "#808080c2"};
+    border: ${({ $isToday, $isWithinRange, $isSelected, $isStartRange, $isEndRange }) =>
+        $isToday && !$isWithinRange && !$isSelected && !$isStartRange && !$isEndRange
+            ? "1px solid orange"
+            : "#808080c2"};
 
     &:hover {
         opacity: 0.6;

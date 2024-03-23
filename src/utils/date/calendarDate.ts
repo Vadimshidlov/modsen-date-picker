@@ -331,13 +331,28 @@ export const isDayOff = (calendarItem: CalendarItemsType, weekStartsOnSunday: bo
 
 export const isHoliday = (calendarItem: CalendarItemsType, holidaysList: HolidaysListType[]) => {
     const currentDate = new Date(calendarItem.year, calendarItem.month, calendarItem.date);
-    // const currentDayNumber = currentDate.getDay();
-    // const currentMonth = currentDate.getMonth();
-    // const currentYear = currentDate.getFullYear();
-
     const filteredHolidaysList = holidaysList.filter(
         (holiday) => holiday.date.getTime() === currentDate.getTime(),
     );
 
     return filteredHolidaysList.length !== 0;
+};
+
+export const getCalendarItems = (
+    renderDay: string | undefined,
+    renderMonth: string | undefined,
+    renderYear: string | undefined,
+    weekStartsOnSunday: boolean,
+): CalendarItemsType[] | null => {
+    if (renderDay && renderMonth && renderYear) {
+        const selectedMonthDaysCount = getDaysInAMonth(+renderYear, +renderMonth - 1);
+
+        return [
+            ...getPreviousMonthDays(+renderYear, +renderMonth - 1, weekStartsOnSunday),
+            ...getCurrentMonthDays(+renderYear, +renderMonth - 1, selectedMonthDaysCount),
+            ...getNextMonthDays(+renderYear, +renderMonth - 1, weekStartsOnSunday),
+        ];
+    }
+
+    return null;
 };

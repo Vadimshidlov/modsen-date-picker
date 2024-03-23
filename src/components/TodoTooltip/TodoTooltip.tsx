@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Text } from "@/components/Text";
 import { TodoToltipContainer } from "@/components/DatePicker";
-import { TodoIconStyled } from "@/components/DatePicker/DatePicker";
+import { TodoIconStyled } from "@/components/DatePicker/index";
 
 export function TodoTooltip() {
     const todoContainerRef = useRef<HTMLDivElement>(null);

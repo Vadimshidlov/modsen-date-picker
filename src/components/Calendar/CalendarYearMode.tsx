@@ -17,6 +17,7 @@ import { ReactComponent as NextYearButton } from "@/assets/svg/next-button.svg";
 import { ReactComponent as PrevMonthButton } from "@/assets/svg/prev-month-button.svg";
 import { ReactComponent as NextMonthButton } from "@/assets/svg/next-month-button.svg";
 import {
+    getCalendarItems,
     getCurrentMonthDays,
     getDateValueFromCalendarItem,
     getDateValues,
@@ -72,6 +73,7 @@ export function CalendarYearMode({
     const [secondDayNumber, secondMonthNumber, secondYearNumber] = getDateValues(dateSecondValue);
     const [innerDayNumber, innerMonthNumber, innerYearNumber] = getDateValues(dateCalendarValue);
     const [renderDay, renderMonth, renderYear] = dateCalendarValue.split("/");
+    const calendarItems = getCalendarItems(renderDay, renderMonth, renderYear, weekStartsOnSunday);
 
     const handlePrevYear = () => {
         if (renderDay && renderMonth && renderYear) {
@@ -82,17 +84,6 @@ export function CalendarYearMode({
         }
     };
 
-    /* const handlePrevYear = () => {
-        const [day, month, year] = dateCalendarValue.split("/");
-
-        if (day && month && year) {
-            dispatch({
-                type: SET_CALENDAR_DATE,
-                payload: { dateValue: `${day}/${month}/${+year - 1}` },
-            });
-        }
-    }; */
-
     const handleNextYear = () => {
         if (renderDay && renderMonth && renderYear) {
             dispatch({
@@ -101,17 +92,6 @@ export function CalendarYearMode({
             });
         }
     };
-
-    /* const handleNextYear = () => {
-        const [day, month, year] = dateCalendarValue.split("/");
-
-        if (day && month && year) {
-            dispatch({
-                type: SET_CALENDAR_DATE,
-                payload: { dateValue: `${day}/${month}/${+year + 1}` },
-            });
-        }
-    }; */
 
     const handlePrevMonth = () => {
         if (renderDay && renderMonth && renderYear) {
@@ -127,20 +107,6 @@ export function CalendarYearMode({
         }
     };
 
-    /* const handlePrevMonth = () => {
-        const [day, month, year] = dateCalendarValue.split("/");
-
-        if (day && month && year) {
-            const nexCalendarDate =
-                +month === 1 ? `${day}/12/${+year - 1}` : `${day}/${+month - 1}/${+year}`;
-
-            dispatch({
-                type: SET_CALENDAR_DATE,
-                payload: { dateValue: nexCalendarDate },
-            });
-        }
-    }; */
-
     const handleNextMonth = () => {
         if (renderDay && renderMonth && renderYear) {
             const nexCalendarDate =
@@ -154,36 +120,6 @@ export function CalendarYearMode({
             });
         }
     };
-
-    /* const handleNextMonth = () => {
-        const [day, month, year] = dateCalendarValue.split("/");
-
-        if (day && month && year) {
-            const nexCalendarDate =
-                +month === 12 ? `${day}/01/${+year + 1}` : `${day}/${+month + 1}/${+year}`;
-
-            dispatch({
-                type: SET_CALENDAR_DATE,
-                payload: { dateValue: nexCalendarDate },
-            });
-        }
-    }; */
-
-    const calendarItems = useMemo((): CalendarItemsType[] | null => {
-        const [day, month, year] = dateCalendarValue.split("/");
-
-        if (day && month && year) {
-            const selectedMonthDaysCount = getDaysInAMonth(+year, +month - 1);
-
-            return [
-                ...getPreviousMonthDays(+year, +month - 1, weekStartsOnSunday),
-                ...getCurrentMonthDays(+year, +month - 1, selectedMonthDaysCount),
-                ...getNextMonthDays(+year, +month - 1, weekStartsOnSunday),
-            ];
-        }
-
-        return null;
-    }, [dateCalendarValue, weekStartsOnSunday]);
 
     const handleWithinRangeClick = (calendarItem: CalendarItemsType) => {
         if (withRange) {
@@ -293,16 +229,11 @@ export function CalendarYearMode({
 
                         const isDayOffDay = isDayOff(calendarItem, weekStartsOnSunday);
 
-                        // console.log(isDayOffDay, "isDayOffDay");
-
                         const isHolidayDay = isHoliday(calendarItem, holidaysList) && withHolidays;
-
-                        // console.log(isHolidayDay, "isHolidayDay");
 
                         if (isInvalidDayButton) {
                             return (
                                 <CalendarDayButton
-                                    // type=""
                                     type={BUTTON_TYPE_INVALID_DAY}
                                     key={index.toString()}
                                     text={String(calendarItem.date)}

@@ -9,7 +9,6 @@ import { Text } from "@/components/Text/index";
 import { ClearButton } from "@/components/Button/Button";
 import { TodoModal } from "@/components/TodoModal";
 import { getCurrentDate } from "@/utils/date/index";
-import { ReactComponent as TodoIcon } from "@/assets/svg/to-do-list.svg";
 import { DatePickerPropsType } from "@/types";
 import {
     CLEAR_FIRST_PICKER_DATE,
@@ -26,11 +25,6 @@ import {
 } from "@/constants";
 import { DatePickerActionsType } from "@/types/types";
 import { TodoTooltip } from "@/components/TodoTooltip/TodoTooltip";
-
-export const TodoIconStyled = styled(TodoIcon)`
-    width: 20px;
-    height: 20px;
-`;
 
 const initialPickerState = {
     datePickerFirstValue: "",
@@ -130,8 +124,6 @@ export function DatePicker({
 }: DatePickerPropsType) {
     const [isShowCalendar, setIsShowCalendar] = useState(false);
     const [pickerState, dispatch] = useReducer(reducer, initialPickerState);
-
-    console.log(pickerState, `pickerState`);
 
     const handleClearPicker = () => {
         if (withRange) {

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { ReactComponent as TodoIcon } from "@/assets/svg/to-do-list.svg";
 
 export const Flex = styled.div`
     display: flex;
@@ -31,4 +32,9 @@ export const TodoToltipContainer = styled(Flex)`
     column-gap: 10px;
     margin: 10px 0px 10px 0px;
     justify-content: center;
+`;
+
+export const TodoIconStyled = styled(TodoIcon)`
+    width: 20px;
+    height: 20px;
 `;

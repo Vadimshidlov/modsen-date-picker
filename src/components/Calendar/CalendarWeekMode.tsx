@@ -12,6 +12,7 @@ import {
     SET_CALENDAR_DATE,
 } from "@/constants";
 import {
+    getCalendarItems,
     getCurrentMonthDays,
     getDateValueFromCalendarItem,
     getDateValues,
@@ -70,36 +71,7 @@ export function CalendarWeekMode({
     const [weekNumber, setWeekNumber] = useState(() =>
         getInitialWeekNumber(dateCalendarValue, weekStartsOnSunday),
     );
-
-    const calendarItems = useMemo((): CalendarItemsType[] | null => {
-        if (renderDay && renderMonth && renderYear) {
-            const selectedMonthDaysCount = getDaysInAMonth(+renderYear, +renderMonth - 1);
-
-            return [
-                ...getPreviousMonthDays(+renderYear, +renderMonth - 1, weekStartsOnSunday),
-                ...getCurrentMonthDays(+renderYear, +renderMonth - 1, selectedMonthDaysCount),
-                ...getNextMonthDays(+renderYear, +renderMonth - 1, weekStartsOnSunday),
-            ];
-        }
-
-        return null;
-    }, [renderDay, renderMonth, renderYear, weekStartsOnSunday]);
-
-    /* const calendarItems = useMemo((): CalendarItemsType[] | null => {
-        const [day, month, year] = dateCalendarValue.split("/");
-
-        if (day && month && year) {
-            const selectedMonthDaysCount = getDaysInAMonth(+year, +month - 1);
-
-            return [
-                ...getPreviousMonthDays(+year, +month - 1, weekStartsOnSunday),
-                ...getCurrentMonthDays(+year, +month - 1, selectedMonthDaysCount),
-                ...getNextMonthDays(+year, +month - 1, weekStartsOnSunday),
-            ];
-        }
-
-        return null;
-    }, [dateCalendarValue, weekStartsOnSunday]); */
+    const calendarItems = getCalendarItems(renderDay, renderMonth, renderYear, weekStartsOnSunday);
 
     const handlePrevWeek = () => {
         if (weekNumber >= 1) {
@@ -130,35 +102,6 @@ export function CalendarWeekMode({
         }
     };
 
-    /* const handlePrevWeek = () => {
-        if (weekNumber >= 1) {
-            setWeekNumber((prevWeek) => prevWeek - 1);
-
-            return;
-        }
-
-        const [day, month, year] = dateCalendarValue.split("/");
-
-        if (day && month && year) {
-            const nexCalendarDate =
-                +month === 1 ? `${day}/12/${+year - 1}` : `${day}/${+month - 1}/${+year}`;
-
-            const previousMonthWeeksCount = getPreviousMonthWeeksCount(
-                nexCalendarDate,
-                weekStartsOnSunday,
-            );
-
-            dispatch({
-                type: SET_CALENDAR_DATE,
-                payload: { dateValue: nexCalendarDate },
-            });
-
-            if (previousMonthWeeksCount !== null) {
-                setWeekNumber(previousMonthWeeksCount);
-            }
-        }
-    }; */
-
     const handleNextWeek = () => {
         if (calendarItems && calendarItems.length / 7 > weekNumber + 1) {
             setWeekNumber((prevWeek) => prevWeek + 1);
@@ -180,28 +123,6 @@ export function CalendarWeekMode({
             setWeekNumber(0);
         }
     };
-
-    /* const handleNextWeek = () => {
-        if (calendarItems && calendarItems.length / 7 > weekNumber + 1) {
-            setWeekNumber((prevWeek) => prevWeek + 1);
-
-            return;
-        }
-
-        const [day, month, year] = dateCalendarValue.split("/");
-
-        if (day && month && year) {
-            const nexCalendarDate =
-                +month === 12 ? `${day}/01/${+year + 1}` : `${day}/${+month + 1}/${+year}`;
-
-            dispatch({
-                type: SET_CALENDAR_DATE,
-                payload: { dateValue: nexCalendarDate },
-            });
-
-            setWeekNumber(0);
-        }
-    }; */
 
     const handleWithinRangeClick = (calendarItem: CalendarItemsType) => {
         if (withRange) {
@@ -327,12 +248,8 @@ export function CalendarWeekMode({
 
                             const isDayOffDay = isDayOff(calendarItem, weekStartsOnSunday);
 
-                            // console.log(isDayOffDay, "isDayOffDay");
-
                             const isHolidayDay =
                                 isHoliday(calendarItem, holidaysList) && withHolidays;
-
-                            // console.log(isHolidayDay, "isHolidayDay");
 
                             if (isInvalidDate) {
                                 return (

@@ -17,4 +17,5 @@ export {
     getCurrentDate,
     isFirstDayInRange,
     isLastDayInRange,
+    getCalendarItems,
 } from "@/utils/date/calendarDate";

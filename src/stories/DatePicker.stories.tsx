@@ -79,12 +79,12 @@ withRangeHOC.args = {
     holidaysList: DEFAULT_HOLIDAYS,
 };
 
-export const withRangeAngWeekModeHOC: StoryObj = (args: DatePickerPropsType) => {
+export const withRangeAndWeekMode: StoryObj = (args: DatePickerPropsType) => {
     const DatePickerWithRange = withWeekMode(withRange(DatePicker));
     return <DatePickerWithRange {...args} />;
 };
 
-withRangeAngWeekModeHOC.args = {
+withRangeAndWeekMode.args = {
     weekStartsOnSunday: true,
     minDate: new Date(2023, 0, 1),
     maxDate: new Date(2025, 0, 31),
@@ -92,56 +92,52 @@ withRangeAngWeekModeHOC.args = {
     holidaysList: DEFAULT_HOLIDAYS,
 };
 
-const decoratorService = new DecoratorService();
-
-decoratorService.addDecorators([withRange, withWeekMode]);
-// decoratorService.addDecorators([withRange, withWeekMode, withWeekSundayWeek]);
-// decoratorService.addDecorators([withRange, withWeekMode, withWeekSundayWeek]);
-
-const DatePickerWithHOCS = decoratorService.getDatePicker();
-
-export const DatePickerFromService: StoryObj = (args: DatePickerPropsType) => {
-    return <DatePickerWithHOCS {...args} />;
-};
-
-DatePickerFromService.args = {
-    // minDate: new Date(2023, 0, 1),
-    // maxDate: new Date(2025, 0, 31),
-    withHolidays: true,
-    holidaysList: DEFAULT_HOLIDAYS,
-};
-
-const decoratorSecondService = new DecoratorService();
-
-decoratorSecondService.addDecorators([
-    withRange,
-    withMinMaxDate(new Date(2020, 0, 1), new Date(2030, 0, 1)),
-]);
-
-const DatePickerWithMinMax = decoratorSecondService.getDatePicker();
-
-export const DatePickerFromServiceWithMinMax: StoryObj = (args: DatePickerPropsType) => {
-    return <DatePickerWithMinMax {...args} />;
-};
-
-DatePickerFromServiceWithMinMax.args = {};
-
-const decoratorThirdService = new DecoratorService();
-
-decoratorThirdService.addDecorators([
-    withRange,
-    withMinMaxDate(new Date(2020, 0, 1), new Date(2030, 0, 1)),
-    withHolidays([
-        { title: "International Women's Day", date: new Date(2023, 2, 8) },
-        { title: "International Women's Day", date: new Date(2024, 2, 8) },
-        { title: "International Women's Day", date: new Date(2025, 2, 8) },
-    ]),
-]);
-
-const DatePickerWithHolidays = decoratorThirdService.getDatePicker();
-
-export const DatePickerFromServiceWithHolidays: StoryObj = (args: DatePickerPropsType) => {
-    return <DatePickerWithHolidays {...args} />;
-};
-
-DatePickerFromServiceWithHolidays.args = {};
+// const decoratorService = new DecoratorService();
+//
+// decoratorService.addDecorators([withRange, withWeekMode]);
+//
+// const DatePickerWithHOCS = decoratorService.getDatePicker();
+//
+// export const DatePickerFromService: StoryObj = (args: DatePickerPropsType) => {
+//     return <DatePickerWithHOCS {...args} />;
+// };
+//
+// DatePickerFromService.args = {
+//     withHolidays: true,
+//     holidaysList: DEFAULT_HOLIDAYS,
+// };
+//
+// const decoratorSecondService = new DecoratorService();
+//
+// decoratorSecondService.addDecorators([
+//     withRange,
+//     withMinMaxDate(new Date(2020, 0, 1), new Date(2030, 0, 1)),
+// ]);
+//
+// const DatePickerWithMinMax = decoratorSecondService.getDatePicker();
+//
+// export const DatePickerFromServiceWithMinMax: StoryObj = (args: DatePickerPropsType) => {
+//     return <DatePickerWithMinMax {...args} />;
+// };
+//
+// DatePickerFromServiceWithMinMax.args = {};
+//
+// const decoratorThirdService = new DecoratorService();
+//
+// decoratorThirdService.addDecorators([
+//     withRange,
+//     withMinMaxDate(new Date(2020, 0, 1), new Date(2030, 0, 1)),
+//     withHolidays([
+//         { title: "International Women's Day", date: new Date(2023, 2, 8) },
+//         { title: "International Women's Day", date: new Date(2024, 2, 8) },
+//         { title: "International Women's Day", date: new Date(2025, 2, 8) },
+//     ]),
+// ]);
+//
+// const DatePickerWithHolidays = decoratorThirdService.getDatePicker();
+//
+// export const DatePickerFromServiceWithHolidays: StoryObj = (args: DatePickerPropsType) => {
+//     return <DatePickerWithHolidays {...args} />;
+// };
+//
+// DatePickerFromServiceWithHolidays.args = {};
