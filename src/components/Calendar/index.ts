@@ -4,4 +4,5 @@ export {
     CalendarContainer,
     CalendarTitleContainer,
     DaysTitleContainer,
+    Flex,
 } from "@/components/Calendar/styled";
