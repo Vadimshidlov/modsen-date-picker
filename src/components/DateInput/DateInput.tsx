@@ -117,8 +117,6 @@ export function DateInput({
         });
     };
 
-    throw new Error("This is for Error Boundary!");
-
     return (
         <DateInputContainer>
             <InputContainer>

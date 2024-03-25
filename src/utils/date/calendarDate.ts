@@ -208,8 +208,6 @@ export const validateRangeInput = (
             new Date(Number(year), Number(month) - 1, Number(day)) <
             new Date(Number(rangeYear), Number(rangeMonth) - 1, Number(rangeDay));
 
-        console.log(result, "result");
-
         return result;
     }
 
