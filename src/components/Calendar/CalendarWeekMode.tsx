@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from "react";
+import * as React from "react";
+import { useState } from "react";
 import {
     BUTTON_TYPE_CURRENT_DAY,
     BUTTON_TYPE_CURRENT_MONTH_DAY,
@@ -13,13 +14,9 @@ import {
 } from "@/constants";
 import {
     getCalendarItems,
-    getCurrentMonthDays,
     getDateValueFromCalendarItem,
     getDateValues,
-    getDaysInAMonth,
     getMontName,
-    getNextMonthDays,
-    getPreviousMonthDays,
     isDateInRange,
 } from "@/utils/date";
 import { Flex } from "@/components/Flex";
@@ -179,9 +176,9 @@ export function CalendarWeekMode({
     };
 
     return (
-        <CalendarContainer>
+        <CalendarContainer data-testid="week-calendar">
             <CalendarButtonsContainer>
-                <CalendarButtonsBlock>
+                <CalendarButtonsBlock data-testid="prev-week-button">
                     <Button onClick={handlePrevWeek}>
                         {null}
                         <PrevYearButton />
@@ -195,7 +192,7 @@ export function CalendarWeekMode({
                 </CalendarTitleContainer>
 
                 <CalendarButtonsBlock>
-                    <Button onClick={handleNextWeek}>
+                    <Button onClick={handleNextWeek} data-testid="next-week-button">
                         {null}
                         <NextYearButton />
                     </Button>

@@ -2,6 +2,7 @@ module.exports = {
     verbose: true,
     preset: "ts-jest",
     testEnvironment: "jsdom",
+    setupFiles: ["jest-localstorage-mock"],
     transform: {
         "^.+\\.(ts|tsx)$": "ts-jest",
         "node_modules/variables/.+\\.(j|t)s?$": "ts-jest",

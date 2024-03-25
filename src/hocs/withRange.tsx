@@ -1,9 +1,11 @@
-import React, { ComponentType, FC } from "react";
+import * as React from "react";
+import { ComponentType, FC } from "react";
+import { DatePickerPropsType } from "@/types";
 
-export const withRange = <P extends object>(WrappedComponent: ComponentType<P>): FC<P> => {
-    function ComponentWithRange(props: P) {
-        return <WrappedComponent {...props} withRange />;
-    }
+export const withRange =
+    <P extends DatePickerPropsType>(WrappedComponent: ComponentType<P>): FC<Omit<P, "withRange">> =>
+    (props: Omit<P, "withRange">) => {
+        const { ...rest } = props;
 
-    return ComponentWithRange;
-};
+        return <WrappedComponent {...(rest as P)} {...props} withRange />;
+    };

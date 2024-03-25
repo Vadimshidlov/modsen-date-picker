@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { TodoItem, TodoListContainer } from "@/components/TodoModal/index";
 import { TodoListPropsType } from "@/types";
 

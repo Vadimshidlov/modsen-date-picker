@@ -1,5 +1,4 @@
-import React, { ChangeEvent, ReactNode } from "react";
-import { SET_FIRST_CALENDAR_DATE } from "@/constants";
+import React, { ChangeEvent, FC, ReactNode } from "react";
 import { HolidaysListType } from "@/constants/calendar";
 
 export type ButtonPropsType = {
@@ -129,10 +128,8 @@ export type DateRangeSecondActionType = {
 };
 
 export type DatePickerActionType = {
-    type: // | "SET_FIRST_CALENDAR_DATE"
-    // | "SET_SECOND_CALENDAR_DATE"
-    // | "SET_CALENDAR_AND_PICKER_DATE"
-    | "CLEAR_SECOND_CALENDAR_DATE"
+    type:
+        | "CLEAR_SECOND_CALENDAR_DATE"
         | "СLEAR_CALENDAR_AND_PICKER_DATE"
         | "СLEAR_PICKER_DATES"
         | "SET_TODO_DATE"
@@ -224,3 +221,38 @@ export type DatePickerPropsType = {
     maxDate: Date;
     holidaysList: HolidaysListType[];
 };
+
+export type ErrorBoundaryPropsType = {
+    children: React.ReactNode;
+};
+
+export type ErrorBoundaryStateType = {
+    hasError: boolean;
+};
+
+export type HocTypes<P extends Partial<DatePickerPropsType>> =
+    | WeekModeType<P>
+    | WithRangeType<P>
+    | WithHolidaysType<P>
+    | WithSundayWeekType<P>;
+
+export type WeekModeType<P extends Partial<DatePickerPropsType>> = (
+    calendar: FC<P>,
+) => FC<Omit<P, "weekMode">>;
+export type WithRangeType<P extends Partial<DatePickerPropsType>> = (
+    calendar: FC<P>,
+) => FC<Omit<P, "withRange">>;
+export type WithHolidaysType<P extends Partial<DatePickerPropsType>> = (
+    calendar: FC<P>,
+) => FC<Omit<P, "withHolidays" | "holidaysList">>;
+export type WithSundayWeekType<P extends Partial<DatePickerPropsType>> = (
+    calendar: FC<P>,
+) => FC<Omit<P, "weekStartsOnSunday">>;
+
+export type DatePickerServiceTypes =
+    | FC<DatePickerPropsType>
+    | FC<Omit<DatePickerPropsType, "withHolidays" | "holidaysList">>
+    | FC<Omit<DatePickerPropsType, "withRange">>
+    | FC<Omit<DatePickerPropsType, "weekMode">>
+    | FC<Omit<DatePickerPropsType, "minDate" | "maxDate">>
+    | FC<Omit<DatePickerPropsType, "weekStartsOnSunday">>;

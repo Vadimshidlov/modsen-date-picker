@@ -1,37 +1,28 @@
-import React, { useMemo } from "react";
+import * as React from "react";
 import {
     BUTTON_TYPE_INVALID_DAY,
     DEFAULT_DAYS,
     REVERSE_DAYS,
     SET_CALENDAR_AND_PICKER_DATE,
     SET_CALENDAR_DATE,
-    SET_FIRST_CALENDAR_DATE,
-    SET_SECOND_CALENDAR_DATE,
 } from "@/constants";
-import { Flex } from "@/components/Flex";
 import { Button } from "@/components/Button";
 import { Text } from "@/components/Text";
-import { DayButton } from "@/components/DayButton";
 import { ReactComponent as PrevYearButton } from "@/assets/svg/prev-button.svg";
 import { ReactComponent as NextYearButton } from "@/assets/svg/next-button.svg";
 import { ReactComponent as PrevMonthButton } from "@/assets/svg/prev-month-button.svg";
 import { ReactComponent as NextMonthButton } from "@/assets/svg/next-month-button.svg";
 import {
     getCalendarItems,
-    getCurrentMonthDays,
     getDateValueFromCalendarItem,
     getDateValues,
-    getDaysInAMonth,
     getMontName,
-    getNextMonthDays,
-    getPreviousMonthDays,
     isDateInRange,
     isDayOff,
     isFirstDayInRange,
     isHoliday,
     isLastDayInRange,
     isToday,
-    isValidRange,
     validateMaxDate,
     validateMinDate,
 } from "@/utils/date/calendarDate";
@@ -51,7 +42,7 @@ import {
     BUTTON_TYPE_START_RANGE,
     BUTTON_TYPE_WITHIN_RANGE,
 } from "@/constants/index";
-import { CalendarItemsType, CalendarYearModePropsType, ChangeRangeDatePropsType } from "@/types";
+import { CalendarItemsType, CalendarYearModePropsType } from "@/types";
 import { handleChangeRangeDate } from "@/utils/handlers";
 import { DaysTitleContainer } from "@/components/Calendar/index";
 
@@ -162,13 +153,13 @@ export function CalendarYearMode({
     };
 
     return (
-        <CalendarContainer>
+        <CalendarContainer data-testid="calendar">
             <CalendarButtonsContainer>
                 <CalendarButtonsBlock>
-                    <Button onClick={handlePrevYear}>
+                    <Button onClick={handlePrevYear} data-testid="prev-year-button">
                         <PrevYearButton />
                     </Button>
-                    <Button onClick={handlePrevMonth}>
+                    <Button onClick={handlePrevMonth} data-testid="prev-month-button">
                         <PrevMonthButton />
                     </Button>
                 </CalendarButtonsBlock>
@@ -176,10 +167,10 @@ export function CalendarYearMode({
                     {getMontName(dateCalendarValue)} {innerYearNumber}
                 </Text>
                 <CalendarButtonsBlock>
-                    <Button onClick={handleNextMonth}>
+                    <Button onClick={handleNextMonth} data-testid="next-month-button">
                         <NextMonthButton />
                     </Button>
-                    <Button onClick={handleNextYear}>
+                    <Button onClick={handleNextYear} data-testid="next-year-button">
                         <NextYearButton />
                     </Button>
                 </CalendarButtonsBlock>

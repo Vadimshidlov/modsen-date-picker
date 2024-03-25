@@ -1,7 +1,8 @@
-import React, { ChangeEvent, useRef, useState } from "react";
+import * as React from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { CLEAR_TODO_DATE } from "@/constants";
 import { TextTitle } from "@/components/Text/Text";
-import TodoService from "@/services/TodoService";
+import TodoService from "@/services/index";
 import { TodoList } from "@/components/TodoModal/TodoList";
 import { TodoForm } from "@/components/TodoModal/TodoForm";
 import {
@@ -75,7 +76,7 @@ export function TodoModal({ todoItemDate, dispatch }: TodoModalPropsType) {
     return (
         todoItemDate && (
             <TodoModalContainer>
-                <TodoModalContent>
+                <TodoModalContent data-testid="todo-modal">
                     <TextTitle>Todolist for: {todoItemDate}</TextTitle>
                     <TodoForm
                         todoTitle={todoTitle}

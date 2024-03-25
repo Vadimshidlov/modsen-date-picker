@@ -1,5 +1,5 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { Flex } from "@/components/Flex/index";
+import * as React from "react";
+import { ChangeEvent, useState } from "react";
 import { ReactComponent as CalendarIcon } from "@/assets/svg/Calendar.svg";
 import { TextError } from "@/components/Text/index";
 import {
@@ -120,9 +120,13 @@ export function DateInput({
     return (
         <DateInputContainer>
             <InputContainer>
-                <CalendarIcon onClick={() => setIsShowCalendar((prev) => !prev)} />
+                <CalendarIcon
+                    data-testid="close-calendar-icon"
+                    onClick={() => setIsShowCalendar((prev) => !prev)}
+                />
                 <DateInputStyled
                     type="text"
+                    data-testid="date-input"
                     placeholder="Choose Date"
                     value={value}
                     onChange={handleInputChange}

@@ -1,7 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import * as React from "react";
+import { useEffect, useRef } from "react";
 import { Text } from "@/components/Text";
 import { TodoToltipContainer } from "@/components/DatePicker";
 import { TodoIconStyled } from "@/components/DatePicker/index";
+
+const CLOSE_DELAY = 4000;
 
 export function TodoTooltip() {
     const todoContainerRef = useRef<HTMLDivElement>(null);
@@ -11,7 +14,7 @@ export function TodoTooltip() {
             if (todoContainerRef.current) {
                 todoContainerRef.current.style.display = "none";
             }
-        }, 4000);
+        }, CLOSE_DELAY);
 
         return () => {
             clearTimeout(timeoutId);

@@ -1,57 +1,73 @@
+import { babel } from "@rollup/plugin-babel";
+import { terser } from "rollup-plugin-terser";
+import external from "rollup-plugin-peer-deps-external";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import typescript from "@rollup/plugin-typescript";
-import { visualizer } from "rollup-plugin-visualizer";
-import terser from "@rollup/plugin-terser";
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
-import alias from '@rollup/plugin-alias';
-import copy from 'rollup-plugin-copy';
+import alias from "@rollup/plugin-alias";
 import svgr from '@svgr/rollup';
-import tsConfigPaths from "rollup-plugin-tsconfig-paths"
+import copy from 'rollup-plugin-copy';
 
-
-const isDev = process.env.NODE_ENV === "development";
 
 export default [
   {
     input: ["./src/index.ts"],
     output: [
       {
-        dir: "dist",
-        format: "esm",
-        preserveModules: true,
-        preserveModulesRoot: "src",
+        file: "dist/index.js",
+        format: "cjs",
         exports: "named",
-        sourcemap: isDev,
+        interop: "auto",
+        sourcemap: true,
+      },
+      {
+        file: "dist/index.es.js",
+        format: "es",
+        interop: "esModule",
+        exports: "named",
+        sourcemap: true,
       },
     ],
     plugins: [
-      tsConfigPaths(),
       peerDepsExternal(),
-      resolve(),
+      babel({
+        exclude: "node_modules/**",
+        presets: ["@babel/preset-react"],
+        babelHelpers: "bundled",
+      }),
+      external(),
+      resolve({
+        extensions: [
+          ".mjs",
+          ".js",
+          ".json",
+          ".node",
+          ".jsx",
+          ".tsx",
+          ".ts",
+          ".svg",
+        ],
+      }),
       commonjs(),
+      svgr({ exportType: 'named', jsxRuntime: 'classic' }),
+      alias({
+        entries: [
+          { find: '@', replacement: 'src' },
+          { find: '@/components/DatePicker', replacement: 'src/components/DatePicker/DatePicker' },
+        ]
+      }),
+      copy({
+        targets: [{ src: 'src/assets/*', dest: 'dist/public/assets' }],
+      }),
       typescript({
         tsconfig: "./tsconfig.json",
         declaration: true,
         declarationDir: "dist",
-        sourceMap: isDev,
+        sourceMap: false,
       }),
-      isDev ? null : terser(),
-      isDev ? visualizer({
-        filename: "analysis.html",
-        open: true,
-      }) : null,
-      alias({
-        entries: [
-          { find: '@', replacement: './src' },
-          { find: '@/components/DatePicker', replacement: './src/components/DatePicker/DatePicker' },
-        ]
-      }),
-      copy({
-
-        targets: [{ src: 'src/assets/*', dest: 'dist/public/assets' }]
-      }),
-      svgr({ exportType: 'named', jsxRuntime: 'automatic' }),
-    ]
+      terser(),
+    ],
+    external: ["react", "react-dom", "styled-components"],
   },
 ];

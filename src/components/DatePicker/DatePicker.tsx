@@ -1,5 +1,5 @@
-import React, { useReducer, useState } from "react";
-import styled from "styled-components";
+import * as React from "react";
+import { useReducer, useState } from "react";
 import { DatePickerFormContainer, DatePickerStyled } from "@/components/DatePicker/index";
 import { DateInput } from "@/components/DateInput/index";
 import { Flex } from "@/components/Flex/index";
@@ -24,8 +24,8 @@ import {
     СLEAR_PICKER_DATES,
 } from "@/constants";
 import { DatePickerActionsType } from "@/types/types";
-import { TodoTooltip } from "@/components/TodoTooltip/TodoTooltip";
-import { ErrorBoundary } from "@/components/ErrorBoundary/ErrorBoundary";
+import { TodoTooltip } from "@/components/TodoTooltip/index";
+import { ErrorBoundary } from "@/components/ErrorBoundary/index";
 
 const initialPickerState = {
     datePickerFirstValue: "",

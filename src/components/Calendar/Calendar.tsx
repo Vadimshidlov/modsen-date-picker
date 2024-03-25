@@ -1,3 +1,4 @@
+import * as React from "react";
 import { CalendarItemsType, CalendarPropsType } from "@/types";
 import { CalendarYearMode } from "@/components/Calendar/CalendarYearMode";
 import { CalendarWeekMode } from "@/components/Calendar/CalendarWeekMode";

@@ -21,12 +21,6 @@ const config: StorybookConfig = {
 
         if (config.module) {
             if (config.module.rules) {
-                // config.module.rules.push({
-                //     test: /\.svg$/i,
-                //     issuer: /\.[jt]sx?$/,
-                //     use: [{ loader: "@svgr/webpack", options: { icon: true } }],
-                // });
-
                 config.module.rules.push({
                     test: /\.svg$/,
                     use: [
@@ -66,14 +60,6 @@ const config: StorybookConfig = {
                         },
                     },
                 ];
-
-                /*config.module.rules = [
-                    {
-                        test: /\.svg$/i,
-                        issuer: /\.[jt]sx?$/,
-                        use: [{ loader: "@svgr/webpack", options: { icon: true } }],
-                    },
-                ];*/
             }
 
             config.module.rules.push({

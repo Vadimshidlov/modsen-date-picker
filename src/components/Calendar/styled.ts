@@ -32,20 +32,16 @@ export const CalendarButtonsContainer = styled(Flex)`
 export const CalendarButtonsBlock = styled(Flex)`
     flex-direction: row;
     justify-content: space-between;
-    //columnGap="8px" align="center"
     column-gap: 8px;
     align-items: center;
 `;
 
 export const CalendarDaysContainer = styled(Flex)`
-    //flexWrap="wrap" align="center" justify="center"
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
 `;
-
-/* direction="column" align="center" justify="center" */
 
 export const CalendarTitleContainer = styled(Flex)`
     align-items: center;

@@ -1,9 +1,11 @@
-import React from "react";
-import { Text, TextUnderline } from "@/components/Text/Text";
+import * as React from "react";
+import { TextUnderline } from "@/components/Text/Text";
 import {
     TodoItemContainer,
+    TodoItemTextContainer,
     TodoItemTitleContainer,
     TodoRemoveButton,
+    TodoText,
     ToggleTodoInput,
 } from "@/components/TodoModal/index";
 import { TodoItemPropsType } from "@/types";
@@ -22,11 +24,13 @@ export function TodoItem({
                     checked={todoItem.completed}
                     onChange={() => handleChangeTodoStatus(todoItemDate, todoItem.id)}
                 />
-                {todoItem.completed ? (
-                    <TextUnderline>{todoItem.title}</TextUnderline>
-                ) : (
-                    <Text>{todoItem.title}</Text>
-                )}
+                <TodoItemTextContainer>
+                    {todoItem.completed ? (
+                        <TextUnderline>{todoItem.title}</TextUnderline>
+                    ) : (
+                        <TodoText>{todoItem.title}</TodoText>
+                    )}
+                </TodoItemTextContainer>
             </TodoItemTitleContainer>
             <TodoRemoveButton onClick={() => handleRemoveTodo(todoItemDate, todoItem.id)}>
                 Remove
