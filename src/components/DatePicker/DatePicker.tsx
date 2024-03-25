@@ -25,6 +25,7 @@ import {
 } from "@/constants";
 import { DatePickerActionsType } from "@/types/types";
 import { TodoTooltip } from "@/components/TodoTooltip/TodoTooltip";
+import { ErrorBoundary } from "@/components/ErrorBoundary/ErrorBoundary";
 
 const initialPickerState = {
     datePickerFirstValue: "",
@@ -134,60 +135,62 @@ export function DatePicker({
     };
 
     return (
-        <DatePickerStyled>
-            <GlobalStyles />
-            <DatePickerFormContainer>
-                {withRange && <Text>From:</Text>}
-                <DateInput
-                    dispatch={dispatch}
-                    value={pickerState.datePickerFirstValue}
-                    dateRangeFirstValue={pickerState.dateRangeFirstValue}
-                    dateRangeSecondValue={pickerState.dateRangeSecondValue}
-                    setIsShowCalendar={setIsShowCalendar}
-                    minDate={minDate}
-                    maxDate={maxDate}
-                    isWithRange={withRange}
-                    isFirstDate
-                />
-                {withRange && (
-                    <>
-                        <Text>To:</Text>
-                        <DateInput
-                            dispatch={dispatch}
-                            value={pickerState.datePickerSecondValue}
-                            dateRangeFirstValue={pickerState.dateRangeFirstValue}
-                            dateRangeSecondValue={pickerState.dateRangeSecondValue}
-                            setIsShowCalendar={setIsShowCalendar}
-                            minDate={minDate}
-                            maxDate={maxDate}
-                            isWithRange={withRange}
-                            isFirstDate={false}
-                        />
-                    </>
-                )}
-            </DatePickerFormContainer>
-            {isShowCalendar && (
-                <Flex direction="column">
-                    <TodoTooltip />
-                    <Calendar
-                        weekStartsOnSunday={weekStartsOnSunday}
-                        dateValue={pickerState.dateRangeFirstValue}
-                        dateSecondValue={pickerState.dateRangeSecondValue}
-                        dateCalendarValue={pickerState.calendarValue}
+        <ErrorBoundary>
+            <DatePickerStyled>
+                <GlobalStyles />
+                <DatePickerFormContainer>
+                    {withRange && <Text>From:</Text>}
+                    <DateInput
                         dispatch={dispatch}
-                        weekMode={weekMode}
+                        value={pickerState.datePickerFirstValue}
+                        dateRangeFirstValue={pickerState.dateRangeFirstValue}
+                        dateRangeSecondValue={pickerState.dateRangeSecondValue}
+                        setIsShowCalendar={setIsShowCalendar}
                         minDate={minDate}
                         maxDate={maxDate}
-                        withRange={withRange}
-                        withHolidays={withHolidays}
-                        holidaysList={holidaysList}
+                        isWithRange={withRange}
+                        isFirstDate
                     />
-                    <ClearButton onClick={handleClearPicker}>Clear</ClearButton>
-                </Flex>
-            )}
-            {pickerState.todoItemDate && (
-                <TodoModal todoItemDate={pickerState.todoItemDate} dispatch={dispatch} />
-            )}
-        </DatePickerStyled>
+                    {withRange && (
+                        <>
+                            <Text>To:</Text>
+                            <DateInput
+                                dispatch={dispatch}
+                                value={pickerState.datePickerSecondValue}
+                                dateRangeFirstValue={pickerState.dateRangeFirstValue}
+                                dateRangeSecondValue={pickerState.dateRangeSecondValue}
+                                setIsShowCalendar={setIsShowCalendar}
+                                minDate={minDate}
+                                maxDate={maxDate}
+                                isWithRange={withRange}
+                                isFirstDate={false}
+                            />
+                        </>
+                    )}
+                </DatePickerFormContainer>
+                {isShowCalendar && (
+                    <Flex direction="column">
+                        <TodoTooltip />
+                        <Calendar
+                            weekStartsOnSunday={weekStartsOnSunday}
+                            dateValue={pickerState.dateRangeFirstValue}
+                            dateSecondValue={pickerState.dateRangeSecondValue}
+                            dateCalendarValue={pickerState.calendarValue}
+                            dispatch={dispatch}
+                            weekMode={weekMode}
+                            minDate={minDate}
+                            maxDate={maxDate}
+                            withRange={withRange}
+                            withHolidays={withHolidays}
+                            holidaysList={holidaysList}
+                        />
+                        <ClearButton onClick={handleClearPicker}>Clear</ClearButton>
+                    </Flex>
+                )}
+                {pickerState.todoItemDate && (
+                    <TodoModal todoItemDate={pickerState.todoItemDate} dispatch={dispatch} />
+                )}
+            </DatePickerStyled>
+        </ErrorBoundary>
     );
 }

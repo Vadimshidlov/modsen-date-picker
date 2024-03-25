@@ -5,16 +5,6 @@ export const Text = styled.p`
     font-weight: 600;
 `;
 
-// export const TextError = styled(Text)`
-//     font-weight: 400;
-//     color: red;
-//     font-size: 15px;
-//     text-align: center;
-//     min-height: 0px;
-//
-//     transition: height 0.5s;
-// `;
-
 interface TextErrorProps {
     $isOpen?: boolean;
 }
