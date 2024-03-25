@@ -1,17 +1,11 @@
-import React, { Component, ErrorInfo } from "react";
+import * as React from "react";
+import { Component, ErrorInfo } from "react";
 import {
     ErrorBoundaryContainer,
     ErrorBoundaryText,
     ErrorBoundaryTitle,
 } from "@/components/ErrorBoundary/index";
-
-export type ErrorBoundaryPropsType = {
-    children: React.ReactNode;
-};
-
-export type ErrorBoundaryStateType = {
-    hasError: boolean;
-};
+import { ErrorBoundaryPropsType, ErrorBoundaryStateType } from "@/types";
 
 export class ErrorBoundary extends Component<ErrorBoundaryPropsType, ErrorBoundaryStateType> {
     constructor(props: ErrorBoundaryPropsType) {

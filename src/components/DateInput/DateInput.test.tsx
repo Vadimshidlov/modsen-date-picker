@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { fireEvent, render } from "@testing-library/react";
 import { DateInput } from "@/components/DateInput/index";
 
@@ -9,7 +9,7 @@ describe("DateInput", () => {
     const maxDate = new Date("2022-12-31");
 
     test("renders with initial value", () => {
-        const { getByPlaceholderText } = render(
+        const { getByTestId } = render(
             <DateInput
                 value="01/01/2022"
                 dateRangeFirstValue=""
@@ -22,12 +22,12 @@ describe("DateInput", () => {
                 isFirstDate
             />,
         );
-        const inputElement = getByPlaceholderText("Choose Date");
+        const inputElement = getByTestId("date-input");
         expect(inputElement.getAttribute("value")).toBe("01/01/2022");
     });
 
     test("triggers onChange event", () => {
-        const { getByPlaceholderText } = render(
+        const { getByTestId } = render(
             <DateInput
                 value=""
                 dateRangeFirstValue=""
@@ -40,7 +40,7 @@ describe("DateInput", () => {
                 isFirstDate
             />,
         );
-        const inputElement = getByPlaceholderText("Choose Date");
+        const inputElement = getByTestId("date-input");
         fireEvent.change(inputElement, { target: { value: "01/01/2022" } });
         expect(dispatchMock).toHaveBeenCalledTimes(1);
     });

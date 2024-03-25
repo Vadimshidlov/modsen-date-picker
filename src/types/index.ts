@@ -18,4 +18,8 @@ export {
     TodoStorageType,
     TodoDataType,
     DatePickerPropsType,
+    ErrorBoundaryPropsType,
+    ErrorBoundaryStateType,
+    HocTypes,
+    DatePickerServiceTypes,
 } from "@/types/types";

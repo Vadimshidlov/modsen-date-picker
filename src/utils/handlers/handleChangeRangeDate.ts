@@ -38,8 +38,6 @@ export const handleChangeRangeDate = ({
         new Date(calendarItem.year, calendarItem.month, calendarItem.date) >
             new Date(yearNumber!, monthNumber!, dayNumber!)
     ) {
-        console.log("2");
-
         dispatch({
             type: SET_SECOND_CALENDAR_DATE,
             payload: {
@@ -72,8 +70,6 @@ export const handleChangeRangeDate = ({
         new Date(calendarItem.year, calendarItem.month, calendarItem.date) >
         new Date(secondYearNumber!, secondMonthNumber!, secondDayNumber!)
     ) {
-        console.log("4");
-
         dispatch({
             type: SET_SECOND_CALENDAR_DATE,
             payload: {

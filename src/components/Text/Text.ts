@@ -24,15 +24,15 @@ export const TextError = styled.p<TextErrorProps>`
 `;
 
 export const TextUnderline = styled(Text)`
-    font-weight: 400;
+    font-weight: 600;
     font-size: 15px;
-    text-align: center;
     text-decoration: line-through;
+    word-break: break-word;
 `;
 
 export const TextTitle = styled(Text)`
     font-weight: 600;
-    font-size: 25px;
+    font-size: 20px;
     text-align: center;
     margin-bottom: 20px;
 `;

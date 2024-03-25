@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from "react";
+import * as React from "react";
+import { useEffect, useRef } from "react";
 import { DayButton } from "@/components/DayButton/DayButton";
 import {
     BUTTON_TYPE_CURRENT_DAY,
@@ -58,7 +59,13 @@ export function CalendarDayButton({
     switch (type) {
         case BUTTON_TYPE_START_RANGE:
             return (
-                <DayButton $isToday={isToday} $isDayOff={isDayOff} $isStartRange ref={buttonRef}>
+                <DayButton
+                    data-testid="start-range-day"
+                    $isToday={isToday}
+                    $isDayOff={isDayOff}
+                    $isStartRange
+                    ref={buttonRef}
+                >
                     {text}
                 </DayButton>
             );
@@ -90,6 +97,7 @@ export function CalendarDayButton({
         case BUTTON_TYPE_END_RANGE:
             return (
                 <DayButton
+                    data-testid="end-range-day"
                     $isToday={isToday}
                     $isDayOff={isDayOff}
                     $isHoliday={isHoliday}
@@ -102,6 +110,7 @@ export function CalendarDayButton({
         case BUTTON_TYPE_CURRENT_DAY:
             return (
                 <DayButton
+                    data-testid="selected-day"
                     $isSelected
                     $isToday={isToday}
                     $isDayOff={isDayOff}
@@ -114,12 +123,12 @@ export function CalendarDayButton({
         case BUTTON_TYPE_CURRENT_MONTH_DAY:
             return (
                 <DayButton
+                    data-testid="current-month-day"
                     $isToday={isToday}
                     $isInnerDay={isInnerDay}
                     $isDayOff={isDayOff}
                     $isHoliday={isHoliday}
                     ref={buttonRef}
-                    // color="#AAAAAA"
                 >
                     {text}
                 </DayButton>

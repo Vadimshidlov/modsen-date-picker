@@ -1,4 +1,3 @@
-/* eslint-disable */
 import styled from "styled-components";
 import { DayButtonPropsType } from "@/types";
 
@@ -30,7 +29,6 @@ export const DayButton = styled.button<DayButtonPropsType>`
     color: ${({
         $isSelected,
         $isInnerDay,
-        // $isToday,
         $isDayOff,
         $isStartRange,
         $isEndRange,
