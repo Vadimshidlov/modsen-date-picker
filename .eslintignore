@@ -1,0 +1,10 @@
+src/stories
+dist/
+.eslintrc.js
+jest.config.js
+src/__mocks__
+src/__mocks__/svgrMock.ts
+cypress.config.ts
+babel.config.js
+
+
