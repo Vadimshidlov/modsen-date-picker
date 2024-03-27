@@ -22,11 +22,11 @@ yarn add styled-components
 - install the package via npm or yarn:
 
 ```
-npm install @vadimshidlov/modsen-date-picker
+npm install vadimshidlov-date-picker
 ```
 
 ```
-yarn add @vadimshidlov/modsen-date-picker
+yarn add vadimshidlov-date-picker
 ```
 
 ## Usage
