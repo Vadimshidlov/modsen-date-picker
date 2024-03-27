@@ -20,3 +20,4 @@ export {
     СLEAR_CALENDAR_AND_PICKER_DATE,
     DEFAULT_HOLIDAYS,
 } from "@/constants/calendar";
+export { THEME } from "@/constants/theme";

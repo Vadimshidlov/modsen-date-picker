@@ -1,6 +1,8 @@
 import * as React from "react";
 import { render } from "@testing-library/react";
 import { ErrorBoundary } from "@/components/ErrorBoundary/index";
+import { THEME } from "@/constants";
+import { ThemeWrapper } from "@/components/ThemeWrapper";
 
 describe("ErrorBoundary", () => {
     const ChildComponent = () => {
@@ -11,9 +13,11 @@ describe("ErrorBoundary", () => {
         console.error = jest.fn();
 
         const { getByText } = render(
-            <ErrorBoundary>
-                <ChildComponent />
-            </ErrorBoundary>,
+            <ThemeWrapper theme={THEME}>
+                <ErrorBoundary>
+                    <ChildComponent />
+                </ErrorBoundary>
+            </ThemeWrapper>,
         );
 
         const errorMessage = getByText("Something went wrong...");
@@ -27,9 +31,11 @@ describe("ErrorBoundary", () => {
         console.error = jest.fn();
 
         const { getByText } = render(
-            <ErrorBoundary>
-                <div>Child component</div>
-            </ErrorBoundary>,
+            <ThemeWrapper theme={THEME}>
+                <ErrorBoundary>
+                    <div>Child component</div>
+                </ErrorBoundary>
+            </ThemeWrapper>,
         );
 
         const childComponent = getByText("Child component");

@@ -22,4 +22,8 @@ export {
     ErrorBoundaryStateType,
     HocTypes,
     DatePickerServiceTypes,
+    ColorsType,
+    FontsType,
+    SizeType,
+    ThemeType,
 } from "@/types/types";

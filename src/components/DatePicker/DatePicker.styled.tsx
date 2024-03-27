@@ -15,7 +15,7 @@ export const DatePickerStyled = styled.div`
     flex-direction: column;
 
     @font-face {
-        font-family: "YourFontFamilyName";
+        font-family: ${({ theme }) => theme.fonts.fontFamily.openSans};
         src: url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap")
             format("ttf");
         font-weight: normal;

@@ -18,7 +18,7 @@ export const DaysTitleContainer = styled(Flex)`
 export const CalendarContainer = styled(Flex)`
     width: 250px;
     padding: 10px;
-    border: 1px solid #dddddd;
+    border: ${({ theme }) => `1px solid ${theme.colors.gray}`};
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
 `;
