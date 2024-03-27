@@ -23,7 +23,6 @@ export const TodoModalContainer = styled.div`
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(85, 85, 85, 0.15);
     z-index: 998;
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
@@ -61,13 +60,12 @@ export const TodoModalContent = styled.div`
     height: 60vh;
     overflow-y: auto;
     overflow-x: hidden;
-    background: #d3d2d0;
+    background: ${({ theme }) => theme.colors.gray};
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 10px;
     border-radius: 8px;
-    padding-bottom: 20px;
+    padding: 10px 10px 20px;
 
     @media (min-width: 1200px) {
         width: 40vw;
@@ -92,30 +90,29 @@ export const TodoFormContainer = styled.div`
 `;
 
 export const TextInput = styled.input`
-    outline: none;
-    font-size: 15px;
-    padding: 5px 10px;
+    height: 32px;
     width: 80%;
-    border: 1px solid #ccc;
+    outline: none;
+    font-size: ${({ theme }) => theme.sizes.s15};
+    padding: 5px 10px;
+    border: ${({ theme }) => `1px solid ${theme.colors.gray}`};
     border-radius: 6px;
     cursor: pointer;
 `;
 
 export const TodoAddButton = styled.button`
+    width: 100px;
+    height: 32px;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 4px;
-    font-family: "Open Sans";
-    font-weight: 600;
+    font-size: ${({ theme }) => theme.sizes.s14};
+    font-weight: ${({ theme }) => theme.fonts.fontWeight.m};
     padding: 7px 9px;
-    font-size: 14px;
-    width: 32px;
-    height: 32px;
     cursor: pointer;
-    width: 100px;
-    background-color: #2f80ed;
-    color: #edf2f4;
+    background-color: ${({ theme }) => theme.colors.darkBlue};
+    color: ${({ theme }) => theme.colors.white};
 
     &:hover {
         opacity: 0.6;
@@ -123,9 +120,9 @@ export const TodoAddButton = styled.button`
 `;
 
 export const TodoRemoveButton = styled(TodoAddButton)`
-    background-color: #2f80ed;
+    background-color: ${({ theme }) => theme.colors.darkBlue};
     width: 55px;
-    font-size: 12px;
+    font-size: ${({ theme }) => theme.sizes.s12};
 `;
 
 export const TodoItemContainer = styled.li`
@@ -160,5 +157,5 @@ export const TodoListContainer = styled.ul`
 export const TodoText = styled(Text)`
     display: flex;
     word-break: break-word;
-    font-size: 15px;
+    font-size: ${({ theme }) => theme.sizes.s15};
 `;

@@ -3,13 +3,12 @@ import { ReactComponent as ClearDateIcon } from "@/assets/svg/Clear.svg";
 
 export const DateInputStyled = styled.input<{ $isValid: boolean }>`
     outline: none;
-    font-family: "Open Sans";
-    font-weight: 400;
-    font-size: 15px;
+    font-weight: ${({ theme }) => theme.fonts.fontWeight.s};
+    font-size: ${({ theme }) => theme.sizes.s15};
     line-height: normal;
     width: 80%;
     outline: none;
-    color: ${({ $isValid }) => ($isValid ? "inherit" : "red")};
+    color: ${({ $isValid, theme }) => ($isValid ? `${theme.colors.black}` : `${theme.colors.red}`)};
 `;
 
 export const StyledClearDateIcon = styled(ClearDateIcon)`
@@ -42,7 +41,7 @@ export const ValidationError = styled(Flex)`
 export const InputContainer = styled(Flex)`
     align-items: center;
     margin: 0 0 8px 0;
-    border: 1px solid #dddddd;
+    border: ${({ theme }) => `1px solid ${theme.colors.gray}`};
     border-radius: 8px;
     padding: 8px 15px;
     column-gap: 8px;

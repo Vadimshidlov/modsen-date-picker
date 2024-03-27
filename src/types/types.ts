@@ -256,3 +256,19 @@ export type DatePickerServiceTypes =
     | FC<Omit<DatePickerPropsType, "weekMode">>
     | FC<Omit<DatePickerPropsType, "minDate" | "maxDate">>
     | FC<Omit<DatePickerPropsType, "weekStartsOnSunday">>;
+
+export type ColorsType = Record<string, string>;
+
+export type FontsType = {
+    fontFamily: Record<string, string>;
+    fontSize: Record<string, number>;
+    fontWeight: Record<string, number>;
+};
+
+export type SizeType = Record<string, string>;
+
+export type ThemeType = {
+    colors: ColorsType;
+    fonts: FontsType;
+    sizes: SizeType;
+};

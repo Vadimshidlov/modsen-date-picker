@@ -4,10 +4,9 @@ import { DayButtonPropsType } from "@/types";
 export const DayButton = styled.button<DayButtonPropsType>`
     display: flex;
     justify-content: center;
-    font-family: "Open Sans";
-    font-weight: 600;
+    font-weight: ${({ theme }) => theme.fonts.fontWeight.m};
     padding: 7px 9px;
-    font-size: 13px;
+    font-size: ${({ theme }) => theme.sizes.s13};
     width: 32px;
     height: 32px;
     cursor: pointer;
@@ -19,14 +18,15 @@ export const DayButton = styled.button<DayButtonPropsType>`
               : ($isSelected || $isToday) && !$isWithinRange
                 ? "8px 8px 8px 8px"
                 : ""};
-    background: ${({ $isStartRange, $isEndRange, $isWithinRange, $isSelected }) =>
+    background: ${({ theme, $isStartRange, $isEndRange, $isWithinRange, $isSelected }) =>
         $isStartRange || $isEndRange || $isSelected
-            ? "#2f80ed"
+            ? `${theme.colors.darkBlue}`
             : $isWithinRange
-              ? "#2f80ed1a"
+              ? `${theme.colors.lightBlue}`
               : "transparent"};
     transition: all 0.5s;
     color: ${({
+        theme,
         $isSelected,
         $isInnerDay,
         $isDayOff,
@@ -37,18 +37,18 @@ export const DayButton = styled.button<DayButtonPropsType>`
         $isHoliday,
     }) =>
         $isStartRange || $isEndRange || $isSelected
-            ? "white"
+            ? `${theme.colors.white}`
             : ($isDayOff || $isHoliday) && !$isInnerDay
-              ? "red"
+              ? `${theme.colors.red}`
               : $isWithinRange
-                ? "#2F80ED"
+                ? `${theme.colors.darkBlue}`
                 : !$isInnerDay && !$isDisabled
-                  ? "black"
-                  : "#808080c2"};
-    border: ${({ $isToday, $isWithinRange, $isSelected, $isStartRange, $isEndRange }) =>
+                  ? `${theme.colors.black}`
+                  : `${theme.colors.lightGray}`};
+    border: ${({ theme, $isToday, $isWithinRange, $isSelected, $isStartRange, $isEndRange }) =>
         $isToday && !$isWithinRange && !$isSelected && !$isStartRange && !$isEndRange
-            ? "1px solid orange"
-            : "#808080c2"};
+            ? `1px solid ${theme.colors.orange}`
+            : `${theme.colors.lightGray}`};
 
     &:hover {
         opacity: 0.6;
@@ -58,8 +58,8 @@ export const DayButton = styled.button<DayButtonPropsType>`
 export const DayWeekButton = styled(DayButton)<DayButtonPropsType>`
     display: flex;
     justify-content: start;
-    font-weight: 900;
+    font-size: ${({ theme }) => theme.sizes.s14};
+    font-weight: ${({ theme }) => theme.fonts.fontWeight.x};
     padding: 6px 8px;
     line-height: 19px;
-    font-size: 14px;
 `;

@@ -6,9 +6,11 @@ export const ErrorBoundaryContainer = styled(Flex)`
     align-items: center;
     justify-content: center;
 `;
+
 export const ErrorBoundaryTitle = styled(Text)`
-    font-size: 30px;
+    font-size: ${({ theme }) => theme.sizes.s30};
 `;
+
 export const ErrorBoundaryText = styled(Text)`
-    font-size: 20px;
+    font-size: ${({ theme }) => theme.sizes.s20};
 `;
